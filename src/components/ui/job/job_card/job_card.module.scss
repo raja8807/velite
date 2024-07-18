@@ -1,0 +1,77 @@
+.JobCard {
+
+  border: 2px solid $color_g1;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  border-radius: 16px;
+//   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+//   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+  &:hover {
+    border-color: $color_p1;
+    cursor: pointer;
+  }
+
+  .top {
+    display: flex;
+    justify-content: space-between;
+
+    .status {
+      display: flex;
+      align-items: center;
+      height: fit-content;
+      gap: 5px;
+      > div {
+        background-color: green;
+        height: 7px;
+        width: 7px;
+        border-radius: 50%;
+      }
+      font-size: 14px;
+      color: green;
+    }
+    > div {
+      margin-bottom: 16px;
+      p {
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      > div {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        small {
+          color: $color_g3;
+        }
+
+        > div {
+          background-color: $color_p1_mild;
+          font-size: 12px;
+          padding: 0px 8px;
+          border-radius: 20px;
+          color: $color_p1;
+        }
+      }
+    }
+  }
+
+  .bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    > div {
+      //   align-items: center;
+      display: flex;
+      gap: 16px;
+
+      p {
+        font-size: 14px;
+      }
+
+      small {
+        color: $color_g3;
+      }
+    }
+  }
+}

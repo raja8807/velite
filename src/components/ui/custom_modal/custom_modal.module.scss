@@ -1,0 +1,12 @@
+.CustomModal {
+  div[class="modal-content"] {
+    border-radius: 10px;
+  }
+
+  .head {
+    p {
+      font-weight: 600;
+      color: $color_p1;
+    }
+  }
+}

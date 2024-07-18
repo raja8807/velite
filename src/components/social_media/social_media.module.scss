@@ -1,0 +1,30 @@
+.social {
+  display: flex;
+  gap: 10px;
+  > div {
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+    @include flexCenter;
+    border: 2px solid white;
+    border-radius: 50%;
+    gap: 10px;
+
+    &:hover {
+      background-color: $color_p1;
+      transform: scale(1.2);
+      // img {
+      //   filter: invert(1);
+      // }
+    }
+  }
+
+  img {
+    margin-bottom: 2px;
+  }
+
+  .twitter {
+    padding: 7px;
+  }
+
+}

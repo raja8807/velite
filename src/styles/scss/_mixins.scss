@@ -1,0 +1,10 @@
+@mixin flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin defaultBox {
+  padding: 20px;
+  border-radius: 10px;
+}

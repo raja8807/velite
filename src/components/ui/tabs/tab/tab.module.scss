@@ -1,0 +1,39 @@
+.tab {
+  padding: 5px 25px;
+  cursor: pointer;
+  font-size: 15px;
+  border-bottom: 3px solid $color_g1;
+  color: $color_g3;
+  
+
+  &:hover {
+    background-color: $color_g1;
+    border-color: $color_g2;
+    color: black;
+  }
+
+  small {
+    font-size: 20px;
+    margin-right: 10px;
+  }
+
+  &.active {
+    color: $color_p1;
+    border-color: $color_p1;
+    background-color: transparent;
+  }
+
+  &.bottom {
+    @include respond-below(md) {
+      p {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 13px;
+        svg {
+          font-size: 25px;
+        }
+      }
+    }
+  }
+}

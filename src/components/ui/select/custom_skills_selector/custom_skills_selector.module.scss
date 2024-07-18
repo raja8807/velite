@@ -1,0 +1,62 @@
+.CustomMultiSelect {
+  position: relative;
+  width: 100%;
+
+  .list {
+    position: absolute;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: white;
+    width: 100%;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+      rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+    background-color: $color_g1;
+
+    h3 {
+      font-size: 20px;
+      padding: 10px 10px 0 10px;
+    }
+    p {
+      cursor: pointer;
+      color: $color_g3;
+      padding: 5px 10px;
+      &:hover {
+        background-color: $color_p2;
+        color: white;
+      }
+    }
+  }
+
+  .bubbles {
+    background-color: $color_g1;
+    min-height: 40px;
+    border-radius: 5px;
+    display: flex;
+    padding: 8px;
+    gap: 10px;
+    flex-wrap: wrap;
+    position: relative;
+
+    small {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 12px;
+      color: $color_g3;
+    }
+
+    .bubble {
+      font-size: 13px;
+      background-color: $color_p2;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 10px;
+      cursor: pointer;
+      svg {
+        font-size: 12px;
+        margin-bottom: 1px;
+        margin-left: 10px;
+      }
+    }
+  }
+}

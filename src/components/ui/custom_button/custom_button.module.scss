@@ -1,0 +1,57 @@
+.customButton {
+  padding: 6px 20px;
+  outline: none;
+  height: fit-content !important;
+  border-radius: 5px;
+  border-width: 1px;
+  border-style: solid;
+  &.wFull {
+    width: 100%;
+  }
+
+  @include respond-below(sm) {
+    font-size: 15px;
+    padding: 6px 15px;
+  }
+
+  &:disabled {
+    opacity: 0.7;
+  }
+  &.v1 {
+    background-color: $color_p1;
+    color: white;
+    border-color: $color_p1;
+
+    &:hover {
+      &:not(&:disabled) {
+        background-color: white;
+        color: $color_p1;
+      }
+    }
+  }
+
+  &.v2 {
+    background-color: white;
+    color: $color_p1;
+    border-color: $color_p1;
+
+    &:hover {
+      &:not(&:disabled) {
+        color: white;
+        background-color: $color_p1;
+      }
+    }
+  }
+
+  &.v3 {
+    border: none;
+    color: $color_p1;
+    background-color: $color_g1;
+  }
+
+  &.v4 {
+    background-color: transparent;
+    border: none;
+    color: $color_p1;
+  }
+}

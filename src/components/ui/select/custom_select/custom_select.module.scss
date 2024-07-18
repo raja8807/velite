@@ -1,0 +1,65 @@
+.CustomSelect {
+  select {
+    &:required {
+      &:invalid {
+        color: gray;
+      }
+    }
+  }
+  option[value=""][disabled] {
+    display: none;
+  }
+  option {
+    color: black;
+  }
+  &.v1 {
+    select {
+      cursor: pointer;
+      padding: 10px 16px;
+      border-radius: 4px;
+      outline: none !important;
+      width: 100%;
+      background-color: white;
+
+      border: 1px solid $color_g2;
+
+      &:active,
+      &:focus,
+      &:focus-visible {
+        border: 1px solid $color_p1;
+      }
+    }
+
+    option {
+      cursor: pointer;
+    }
+  }
+
+  &.error {
+    animation: 0.5s shake;
+    border-color: red;
+    // display: none;
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-4px);
+  }
+  40% {
+    transform: translate(4px);
+  }
+  60% {
+    transform: translate(-4px);
+  }
+  80% {
+    transform: translate(4px);
+  }
+
+  100% {
+    transform: translate(0);
+  }
+}

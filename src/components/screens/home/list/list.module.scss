@@ -1,0 +1,86 @@
+.ExamsList {
+  background-color: #fafafa;
+  height: 100%;
+  .portal {
+    background-color: white;
+    min-height: 100%;
+    border-radius: 20px;
+    padding: 30px;
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid $color_g2;
+      padding-bottom: 16px;
+
+      .left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        small {
+          color: $color_g2;
+        }
+
+        p {
+          margin: 0;
+          //   color: $color_g3;
+        }
+
+        svg {
+          font-size: 30px;
+          //   color: $color_p1;
+        }
+      }
+    }
+
+    .exam {
+      border: 1px solid $color_g3;
+      margin: 8px 0;
+      border-radius: 8px;
+      padding: 8px 16px;
+
+      .name {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid $color_g2;
+
+        > div {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .ques {
+          font-size: 14px;
+        }
+      }
+
+      .time {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+
+        > div {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-size: 14px;
+          color: $color_g3;
+        }
+      }
+      cursor: pointer;
+      &:hover {
+        background-color: $color_p1;
+        * {
+          color: white;
+        }
+      }
+    }
+  }
+}

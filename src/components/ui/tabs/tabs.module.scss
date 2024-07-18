@@ -1,0 +1,24 @@
+.tabs {
+  display: flex;
+  border-bottom: 1px solid $color_g1;
+  flex-wrap: wrap;
+  position: sticky;
+  top: -15px;
+  background-color: white;
+  z-index: 99;
+  margin-bottom: 10px;
+
+  &.goBottom {
+    @include respond-below(md) {
+      position: fixed;
+      top: unset;
+      bottom: 0;
+      margin: 0;
+      width: 100dvw;
+      left: 0;
+      border-bottom: none;
+      border-top: 2px solid $color_g1;
+      justify-content: center;
+    }
+  }
+}

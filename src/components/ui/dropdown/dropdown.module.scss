@@ -1,0 +1,44 @@
+.CustomDropDown {
+  button {
+    padding: 0;
+    margin: 0;
+    background-color: transparent !important;
+    border: none;
+    &::after {
+      display: none;
+    }
+
+    * {
+      color: initial;
+    }
+  }
+
+  .option {
+    padding: 4px 10px;
+    cursor: pointer;
+
+    > div {
+      display: flex;
+      align-items: center;
+      width: fit-content;
+      justify-content: flex-start !important;
+      gap: 10px;
+    }
+
+    svg {
+      margin-top: 2px;
+    }
+
+    &:hover {
+      background-color: $color_g2;
+    }
+
+    &.v_red {
+      color: rgb(200, 22, 22);
+
+      &:hover {
+        background-color: rgba(200, 22, 22, 0.1);
+      }
+    }
+  }
+}

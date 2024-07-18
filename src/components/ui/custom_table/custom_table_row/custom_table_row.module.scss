@@ -1,0 +1,14 @@
+.CustomTable {
+  cursor: pointer;
+  &:hover {
+    background-color: $color_g1;
+  }
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 5px;
+  padding: 20px 10px;
+
+  div[class="col"] {
+    font-size: 15px;
+    // margin-bottom: 10px;
+  }
+}
