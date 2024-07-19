@@ -94,7 +94,7 @@ const ExamsList = ({
                           </div>
 
                           <div>
-                            <p>Previous : {getPrev(el)}</p>
+                            <p>Previous high: {getPrev(el)}</p>
                           </div>
                         </div>
                       </div>
