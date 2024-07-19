@@ -8,6 +8,7 @@ import CustomInput from "@/components/ui/cuatom_input/cuatom_input";
 import CustomTextArea from "@/components/ui/custom_textarea/custom_textarea";
 import { v4 } from "uuid";
 import { Toast } from "react-bootstrap";
+import { addData, updateData } from "@/libs/firebase/firebase";
 
 const ExamPortal = ({
   currentExam,
@@ -19,6 +20,8 @@ const ExamPortal = ({
 }) => {
   const options = ["A", "B", "C", "D"];
 
+  const [isLoading, setInsLoading] = useState(false);
+
   return (
     <div
       className={styles.ExamPortal}
@@ -29,37 +32,56 @@ const ExamPortal = ({
       <CustomContainer>
         <MainFrame>
           <form
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
               e.preventDefault();
-              const noAnswers = currentExam.questions.filter(
-                (q) => q.answer === null
-              );
+              setInsLoading(true);
+              try {
+                const noAnswers = currentExam.questions.filter(
+                  (q) => q.answer === null
+                );
 
-              if (noAnswers.length) {
-                const x = noAnswers.map((a) => {
-                  return (
-                    currentExam.questions.findIndex((q) => q.id === a.id) + 1
-                  );
-                });
-                alert(`Questions ${x.join(", ")} has no answer selected`);
-                return;
-              } else {
-                if (isNewExam) {
-                  setExamsList((prev) => [currentExam, ...prev]);
-                  setCurrentScreen("portal");
-                  return;
-                } else {
-                  setExamsList((prev) => {
-                    const examIndex = prev.findIndex(
-                      (e) => e.id === currentExam.id
+                if (noAnswers.length) {
+                  const x = noAnswers.map((a) => {
+                    return (
+                      currentExam.questions.findIndex((q) => q.id === a.id) + 1
                     );
-                    const exams = [...prev];
-                    exams[examIndex] = currentExam;
-                    return exams;
                   });
+                  alert(`Questions ${x.join(", ")} has no answer selected`);
+                } else {
+                  if (isNewExam) {
+                    const eId = v4();
+
+                    await addData(
+                      "exams",
+                      {
+                        id: eId,
+                        ...currentExam,
+                      },
+                      eId
+                    );
+
+                    setExamsList((prev) => [currentExam, ...prev]);
+                    setCurrentScreen("portal");
+                    showToastMessage("Saved Successfully");
+                  } else {
+                    await updateData("exams", currentExam, currentExam.id);
+
+                    setExamsList((prev) => {
+                      const examIndex = prev.findIndex(
+                        (e) => e.id === currentExam.id
+                      );
+                      const exams = [...prev];
+                      exams[examIndex] = currentExam;
+                      return exams;
+                    });
+                  }
                 }
                 showToastMessage("Saved Successfully");
+              } catch (err) {
+                showToastMessage("Something went wrong");
+                console.log(err);
               }
+              setInsLoading(false);
             }}
           >
             <div className={styles.portal}>
@@ -136,7 +158,6 @@ const ExamPortal = ({
                           return (
                             <Col xs={12} md={6} key={`ans_${ansIdx}`}>
                               <div className={`${styles.answer}`}>
-                                
                                 <CustomInput
                                   value={ans}
                                   onChange={(e, v) => [
@@ -150,7 +171,7 @@ const ExamPortal = ({
                                   required
                                 />
 
-<Form.Check
+                                <Form.Check
                                   checked={currentQuestion.answer === ansIdx}
                                   className={styles.check}
                                   id={`${currentQuestion.id}_ans`}
@@ -210,7 +231,7 @@ const ExamPortal = ({
                     Back To List
                   </CustomButton>
 
-                  <CustomButton>Submit</CustomButton>
+                  <CustomButton isLoading={isLoading}>Submit</CustomButton>
                 </div>
               </div>
             </div>

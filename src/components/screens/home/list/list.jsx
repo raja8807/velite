@@ -12,17 +12,8 @@ const ExamsList = ({
   session,
   setCurrentScreen,
   setCurrentExam,
-  submissions,
   examsList,
 }) => {
-  const getPrev = (el) => {
-    const sub = submissions.find((s) => s.exam_id === el.id);
-    if (sub) {
-      return `${sub.mark}/${el.questions.length}`;
-    }
-    return "NA";
-  };
-
   return (
     <>
       <div className={styles.ExamsList}>
