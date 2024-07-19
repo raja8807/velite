@@ -9,15 +9,20 @@
     padding: 30px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+
     gap: 16px;
 
     .top {
       display: flex;
       justify-content: space-between;
+
       align-items: center;
       border-bottom: 1px solid $color_g2;
       padding-bottom: 16px;
+
+      .time {
+        width: 100px;
+      }
 
       .left {
         display: flex;
@@ -40,72 +45,44 @@
       }
     }
 
+    .cont {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
     .middle {
       display: flex;
       flex-direction: column-reverse;
+      gap: 20px;
 
       .question {
         height: 100%;
         // overflow: scroll;
+        margin-bottom: 40px;
         small {
           color: $color_g3;
+          font-size: 20px;
+        }
+
+        .qHead {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 4px;
         }
 
         .answer {
-          display: flex;
           margin: 8px 0;
-          border: 1px solid $color_g2;
-          padding: 10px;
-          border-radius: 10px;
-          position: relative;
+          display: grid;
+          align-items: center;
+          grid-template-columns: calc(100% - 30px) 30px;
+          gap: 10px;
 
-          .ico {
-            position: absolute;
-            top: 50%;
-            right: 10px;
-            // background-color: red;
-            width: fit-content;
-            transform: translate(0, -60%);
-          }
-
-          > div {
-            width: 50px;
-            color: $color_g3;
-          }
-
-          &:hover {
-            &:not(.disabled) {
-              cursor: pointer;
-              border-color: $color_p1;
-            }
-          }
-
-          &.selected {
-            background-color: $color_p1;
-          }
-
-          &.disabled {
-            opacity: 0.5;
-          }
-
-          &.correct {
-            background-color: #4bb543;
-            color: white;
-            opacity: 1;
-
-            > div {
-              color: white;
-            }
-          }
-
-          &.wrong {
-            background-color: #f32013;
-            color: white;
-            opacity: 1;
-
-            > div {
-              color: white;
-            }
+          input[class*="form-check-input"] {
+            border-radius: 50%;
+            height: 25px;
+            width: 25px;
+            cursor: pointer;
           }
         }
       }

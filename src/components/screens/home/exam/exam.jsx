@@ -3,116 +3,21 @@ import styles from "./exam.module.scss";
 import MainFrame from "@/components/ui/main_frame/main_frame";
 import CustomContainer from "@/components/ui/custom_container/custom_container";
 import CustomButton from "@/components/ui/custom_button/custom_button";
-import { CheckCircleFill, Clock, XCircleFill } from "react-bootstrap-icons";
-import { Col, Row } from "react-bootstrap";
-import dynamic from "next/dynamic";
-
-const StartExamPopup = dynamic(
-  () => import("./start_exam_popup/start_exam_popup"),
-  {
-    ssr: false,
-  }
-);
-const SubmitExamPopup = dynamic(
-  () => import("./submit_exam_popup/submit_exam_popup"),
-  {
-    ssr: false,
-  }
-);
+import { Col, Form, Row } from "react-bootstrap";
+import CustomInput from "@/components/ui/cuatom_input/cuatom_input";
+import CustomTextArea from "@/components/ui/custom_textarea/custom_textarea";
+import { v4 } from "uuid";
+import { Toast } from "react-bootstrap";
 
 const ExamPortal = ({
   currentExam,
-  setCurrentScreen,
   setCurrentExam,
-  setSubmissions,
+  setCurrentScreen,
+  isNewExam,
+  setExamsList,
+  showToastMessage,
 }) => {
-  const [questions, setQuestions] = useState(currentExam.questions);
-
-  const [showStartPopup, setShowStartPopup] = useState(true);
-  const [showSubmitPopup, setShowSubmitPopup] = useState(false);
-
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const currentQuestion = questions[currentQuestionIndex];
   const options = ["A", "B", "C", "D"];
-
-  let timeout = null;
-
-  const checkAnswer = (ansIdx) => {
-    clearTimeout(timeout);
-    setQuestions((prev) => {
-      const q = [...prev];
-      q[currentQuestionIndex].selectedAnswer = ansIdx;
-      return q;
-    });
-
-    // if (currentQuestionIndex !== questions.length - 1) {
-    //   timeout = setTimeout(() => {
-    //     setCurrentQuestionIndex((prev) => prev + 1);
-    //   }, 5000);
-    // }
-  };
-
-  const getAnsColor = (ansIdx) => {
-    if (currentQuestion.selectedAnswer !== null) {
-      if (currentQuestion.selectedAnswer === currentQuestion.answer) {
-        if (ansIdx === currentQuestion.selectedAnswer) {
-          return `${styles.correct} ${styles.disabled}`;
-        }
-      } else {
-        if (ansIdx === currentQuestion.answer) {
-          return `${styles.correct} ${styles.disabled}`;
-        }
-        if (ansIdx === currentQuestion.selectedAnswer) {
-          return `${styles.wrong} ${styles.disabled}`;
-        }
-      }
-
-      return styles.disabled;
-    }
-    return "";
-  };
-
-  useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      event.preventDefault();
-      event.returnValue = ""; // This line is necessary for Chrome to show the alert
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
-
-  const examDurationMinute = currentExam.time;
-
-  const [minutes, setMinutes] = useState(examDurationMinute);
-  const [seconds, setSeconds] = useState(0);
-  const [isActive, setIsActive] = useState(false);
-
-  useEffect(() => {
-    let countdownInterval;
-
-    if (isActive) {
-      countdownInterval = setInterval(() => {
-        if (seconds > 0) {
-          setSeconds(seconds - 1);
-        } else {
-          if (minutes === 0) {
-            clearInterval(countdownInterval);
-            setIsActive(false);
-            setShowSubmitPopup("time");
-          } else {
-            setMinutes(minutes - 1);
-            setSeconds(59);
-          }
-        }
-      }, 1000);
-    }
-
-    return () => clearInterval(countdownInterval);
-  }, [minutes, seconds, isActive]);
 
   return (
     <div
@@ -121,145 +26,195 @@ const ExamPortal = ({
         e.preventDefault();
       }}
     >
-      <StartExamPopup
-        show={showStartPopup}
-        setShow={setShowStartPopup}
-        setIsActive={setIsActive}
-        questions={questions}
-        examDurationMinute={examDurationMinute}
-        setCurrentScreen={setCurrentScreen}
-        setCurrentExam={setCurrentExam}
-      />
-      <SubmitExamPopup
-        show={showSubmitPopup}
-        setShow={setShowSubmitPopup}
-        questions={questions}
-        setCurrentScreen={setCurrentScreen}
-        setCurrentExam={setCurrentExam}
-        setSubmissions={setSubmissions}
-        currentExam={currentExam}
-      />
       <CustomContainer>
         <MainFrame>
-          <div className={styles.portal}>
-            <div className={styles.top}>
-              <div className={styles.left}>
-                <Clock />
-                <div>
-                  <small>Time Remaining</small>
-                  <p>
-                    {minutes < 10 ? `0${minutes}` : minutes}:
-                    {seconds < 10 ? `0${seconds}` : seconds}
-                  </p>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              const noAnswers = currentExam.questions.filter(
+                (q) => q.answer === null
+              );
+
+              if (noAnswers.length) {
+                const x = noAnswers.map((a) => {
+                  return (
+                    currentExam.questions.findIndex((q) => q.id === a.id) + 1
+                  );
+                });
+                alert(`Questions ${x.join(", ")} has no answer selected`);
+                return;
+              } else {
+                if (isNewExam) {
+                  setExamsList((prev) => [currentExam, ...prev]);
+                  setCurrentScreen("portal");
+                  return;
+                } else {
+                  setExamsList((prev) => {
+                    const examIndex = prev.findIndex(
+                      (e) => e.id === currentExam.id
+                    );
+                    const exams = [...prev];
+                    exams[examIndex] = currentExam;
+                    return exams;
+                  });
+                }
+                showToastMessage("Saved Successfully");
+              }
+            }}
+          >
+            <div className={styles.portal}>
+              <div className={styles.top}>
+                <div className={styles.left}>
+                  {/* <Clock /> */}
+                  <div>
+                    <small>Exam Tilte</small>
+                    <CustomInput
+                      value={currentExam?.title}
+                      onChange={(e, v) => {
+                        setCurrentExam((prev) => ({ ...prev, title: v }));
+                      }}
+                      required
+                      placeHolder="Title"
+                    />
+                  </div>
+                  <div className={styles.time}>
+                    <small>Exam Time</small>
+                    <CustomInput
+                      type="number"
+                      value={currentExam?.time}
+                      minValue={1}
+                      min={1}
+                      onChange={(e, v) => {
+                        setCurrentExam((prev) => ({ ...prev, time: v }));
+                      }}
+                      required
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div>
-                <CustomButton
-                  onClick={() => {
-                    setShowSubmitPopup(true);
-                  }}
-                >
-                  Submit
-                </CustomButton>
-              </div>
-            </div>
-
-            <div className={styles.middle}>
-              <div className={styles.question}>
-                <small>
-                  Question {currentQuestionIndex + 1} of {questions.length}
-                </small>
-                <p>{currentQuestion.question}</p>
-                <br />
-                <Row>
-                  {currentQuestion.answers.map((ans, ansIdx) => {
-                    return (
-                      <Col xs={12} md={6} key={`ans_${ansIdx}`}>
-                        <div
-                          className={`${styles.answer} ${getAnsColor(ansIdx)}`}
-                          onClick={() => {
-                            if (currentQuestion.selectedAnswer === null) {
-                              checkAnswer(ansIdx);
-                            }
+              <div className={styles.middle}>
+                {currentExam.questions.map((currentQuestion, qIdx) => {
+                  return (
+                    <div className={styles.question} key={currentQuestion.id}>
+                      <div className={styles.qHead}>
+                        <small>Question {qIdx + 1}</small>
+                        <CustomButton
+                          variant={2}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setCurrentExam((prev) => {
+                              const ex = { ...prev };
+                              ex.questions = ex.questions.filter(
+                                (q) => q.id !== currentQuestion.id
+                              );
+                              return ex;
+                            });
                           }}
                         >
-                          <div>{options[ansIdx]}.</div>
-                          {ans}
+                          Delete
+                        </CustomButton>
+                      </div>
+                      <CustomTextArea
+                        value={currentQuestion.question}
+                        rows={5}
+                        onChange={(e, v) => [
+                          setCurrentExam((prev) => {
+                            const ex = { ...prev };
 
-                          <div className={styles.ico}>
-                            {currentQuestion?.selectedAnswer === ansIdx ? (
-                              currentQuestion.answer ===
-                              currentQuestion.selectedAnswer ? (
-                                <CheckCircleFill />
-                              ) : (
-                                <XCircleFill />
-                              )
-                            ) : (
-                              ""
-                            )}
-                          </div>
-                        </div>
-                      </Col>
-                    );
-                  })}
-                </Row>
-              </div>
-            </div>
+                            ex.questions[qIdx].question = v;
 
-            <div className={styles.bottom}>
-              <CustomButton
-                variant={2}
-                disabled={currentQuestionIndex === 0}
-                onClick={() => {
-                  clearTimeout(timeout);
+                            return ex;
+                          }),
+                        ]}
+                        required
+                        placeHolder="Question"
+                      />
+                      <br />
+                      <Row>
+                        {currentQuestion.answers.map((ans, ansIdx) => {
+                          return (
+                            <Col xs={12} md={6} key={`ans_${ansIdx}`}>
+                              <div className={`${styles.answer}`}>
+                                
+                                <CustomInput
+                                  value={ans}
+                                  onChange={(e, v) => [
+                                    setCurrentExam((prev) => {
+                                      const ex = { ...prev };
+                                      ex.questions[qIdx].answers[ansIdx] = v;
+                                      return ex;
+                                    }),
+                                  ]}
+                                  placeHolder={`Option ${options[ansIdx]}.`}
+                                  required
+                                />
 
-                  setCurrentQuestionIndex((prev) => prev - 1);
-                }}
-              >
-                Prev
-              </CustomButton>
-              <div className={styles.nums}>
-                {questions.map((q, i) => {
-                  return (
-                    <div
-                      key={`ques_btn_${i}`}
-                      className={
-                        currentQuestionIndex === i ? styles.active : ""
-                      }
-                      onClick={() => {
-                        clearTimeout(timeout);
-                        setCurrentQuestionIndex(i);
-                      }}
-                    >
-                      {i + 1}
+<Form.Check
+                                  checked={currentQuestion.answer === ansIdx}
+                                  className={styles.check}
+                                  id={`${currentQuestion.id}_ans`}
+                                  onChange={(e) => {
+                                    setCurrentExam((prev) => {
+                                      const ex = { ...prev };
+                                      ex.questions[qIdx].answer = ansIdx;
+                                      return ex;
+                                    });
+                                  }}
+                                />
+                              </div>
+                            </Col>
+                          );
+                        })}
+                      </Row>
                     </div>
                   );
                 })}
+
+                <CustomButton
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setCurrentExam((prev) => {
+                      const ex = { ...prev };
+
+                      const id = v4();
+
+                      console.log(id);
+
+                      ex.questions = [
+                        ...ex.questions,
+                        {
+                          id,
+                          question: "",
+                          answers: ["", "", "", ""],
+                          answer: null,
+                          selectedAnswer: null,
+                        },
+                      ];
+
+                      return ex;
+                    });
+                  }}
+                >
+                  Add Question
+                </CustomButton>
+
+                <div className={styles.cont}>
+                  <CustomButton
+                    variant={2}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setCurrentScreen("list");
+                    }}
+                  >
+                    Back To List
+                  </CustomButton>
+
+                  <CustomButton>Submit</CustomButton>
+                </div>
               </div>
-              {currentQuestionIndex === questions.length - 1 ? (
-                <CustomButton
-                  onClick={() => {
-                    clearTimeout(timeout);
-                    setShowSubmitPopup(true);
-                  }}
-                >
-                  Submit
-                </CustomButton>
-              ) : (
-                <CustomButton
-                  variant={1}
-                  disabled={currentQuestionIndex === questions.length - 1}
-                  onClick={() => {
-                    clearTimeout(timeout);
-                    setCurrentQuestionIndex((prev) => prev + 1);
-                  }}
-                >
-                  Next
-                </CustomButton>
-              )}
             </div>
-          </div>
+          </form>
         </MainFrame>
       </CustomContainer>
     </div>

@@ -3,26 +3,17 @@ import styles from "./login.module.scss";
 import MainFrame from "@/components/ui/main_frame/main_frame";
 import CustomInput from "@/components/ui/cuatom_input/cuatom_input";
 import CustomButton from "@/components/ui/custom_button/custom_button";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/libs/firebase/firebase";
 import CustomContainer from "@/components/ui/custom_container/custom_container";
 
 const LoginScreen = () => {
-  const [currentForm, setCurrentForm] = useState("Login");
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const [loginValues, setLoginValues] = useState({
     email: "",
     password: "",
-  });
-  const [signupValues, setSignupValues] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
   });
 
   return (
@@ -31,141 +22,52 @@ const LoginScreen = () => {
         <MainFrame>
           <div className={styles.wrap}>
             <div className={styles.box}>
-              <h2>{currentForm}</h2>
-              {currentForm === "Login" && (
-                <form
-                  onSubmit={async (e) => {
-                    e.preventDefault();
-                    setError(null);
-                    setIsLoading(true);
-                    try {
+              <h2>Admin Login</h2>
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  setError(null);
+                  setIsLoading(true);
+                  try {
+                    if (
+                      loginValues.email === process.env.NEXT_PUBLIC_SFZOM_ITA
+                    ) {
                       const user = await signInWithEmailAndPassword(
                         auth,
                         loginValues.email,
                         loginValues.password
                       );
-                    } catch (err) {
-                      setError(err.message);
+                    } else {
+                      throw new Error("Unauthorized");
                     }
-                    setIsLoading(false);
+                  } catch (err) {
+                    setError(err.message);
+                  }
+                  setIsLoading(false);
+                }}
+              >
+                <CustomInput
+                  placeHolder="Email"
+                  onChange={(e, v) => {
+                    setError(null);
+                    setLoginValues((prev) => ({ ...prev, email: v }));
                   }}
-                >
-                  <CustomInput
-                    placeHolder="Email"
-                    onChange={(e, v) => {
-                      setError(null);
-                      setLoginValues((prev) => ({ ...prev, email: v }));
-                    }}
-                    error={error}
-                    value={loginValues.email}
-                  />
-                  <CustomInput
-                    placeHolder="Password"
-                    type="password"
-                    onChange={(e, v) => {
-                      setError(null);
+                  error={error}
+                  value={loginValues.email}
+                />
+                <CustomInput
+                  placeHolder="Password"
+                  type="password"
+                  onChange={(e, v) => {
+                    setError(null);
 
-                      setLoginValues((prev) => ({ ...prev, password: v }));
-                    }}
-                    value={loginValues.password}
-                    error={error}
-                  />
-                  <CustomButton isLoading={isLoading}>Login</CustomButton>
-                  <small>
-                    Don&apos;t have account?{" "}
-                    <span
-                      onClick={() => {
-                        setError(null);
-
-                        setCurrentForm("Sign Up");
-                      }}
-                    >
-                      Sign Up
-                    </span>
-                  </small>
-                </form>
-              )}
-              {currentForm === "Sign Up" && (
-                <form
-                  onSubmit={async (e) => {
-                    e.preventDefault();
-                    try {
-                      setError(null);
-
-                      setIsLoading(true);
-
-                      await createUserWithEmailAndPassword(
-                        auth,
-                        signupValues.email,
-                        signupValues.password
-                      );
-
-                      setCurrentForm("Login");
-                      setLoginValues({ ...signupValues });
-                    } catch (error) {
-                      setError(error.message);
-                    }
-                    setIsLoading(false);
-
-                    // const user = await signInWithEmailAndPassword(
-                    //   auth,
-                    //   "yora8807@gmail.com",
-                    //   "qwerty12345"
-                    // );
-
-                    // console.log(user);
+                    setLoginValues((prev) => ({ ...prev, password: v }));
                   }}
-                >
-                  <CustomInput
-                    placeHolder="Email"
-                    onChange={(e, v) => {
-                      setError(null);
-
-                      setSignupValues((prev) => ({ ...prev, email: v }));
-                    }}
-                    value={signupValues.email}
-                    error={error}
-                  />
-                  <CustomInput
-                    placeHolder="Password"
-                    type="password"
-                    onChange={(e, v) => {
-                      setError(null);
-
-                      setSignupValues((prev) => ({ ...prev, password: v }));
-                    }}
-                    value={signupValues.password}
-                    error={error}
-                  />
-                  <CustomInput
-                    placeHolder="Confirm Password"
-                    type="password"
-                    onChange={(e, v) => {
-                      setError(null);
-
-                      setSignupValues((prev) => ({
-                        ...prev,
-                        confirmPassword: v,
-                      }));
-                    }}
-                    value={signupValues.confirmPassword}
-                    error={error}
-                  />
-                  <CustomButton isLoading={isLoading}>Sign Up</CustomButton>
-                  <small>
-                    Already have account?{" "}
-                    <span
-                      onClick={() => {
-                        setError(null);
-
-                        setCurrentForm("Login");
-                      }}
-                    >
-                      Login
-                    </span>
-                  </small>
-                </form>
-              )}
+                  value={loginValues.password}
+                  error={error}
+                />
+                <CustomButton isLoading={isLoading}>Login</CustomButton>
+              </form>
             </div>
           </div>
         </MainFrame>
