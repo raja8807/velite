@@ -13,7 +13,7 @@ const ExamsList = ({
   setCurrentExam,
   submissions,
   examsList,
-  setExamsList
+  setExamsList,
 }) => {
   const fetchExamsList = async () => {
     try {
@@ -89,11 +89,11 @@ const ExamsList = ({
                           </div>
                         </div>
                         <div className={styles.time}>
-                          <div>
+                          <div className={styles.min}>
                             <Clock /> <p>{el.time} Minutes</p>
                           </div>
 
-                          <div>
+                          <div  className={styles.min}>
                             <p>Previous high: {getPrev(el)}</p>
                           </div>
                         </div>

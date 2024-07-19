@@ -3,6 +3,7 @@ import CustomModal from "@/components/ui/custom_modal/custom_modal";
 import { addData } from "@/libs/firebase/firebase";
 import React from "react";
 import { v4 } from "uuid";
+import { useState } from "react";
 
 const SubmitExamPopup = ({
   show,
@@ -26,6 +27,8 @@ const SubmitExamPopup = ({
     return ca;
   };
 
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
   const submitExam = async () => {
     try {
       const id = v4();
@@ -38,25 +41,70 @@ const SubmitExamPopup = ({
       await addData("submissions", submission);
 
       setSubmissions((prev) => [submission, ...prev]);
-      setCurrentExam(null);
-      setCurrentScreen("list");
+      setIsSubmitted(true);
     } catch (err) {
       console.log(err);
     }
   };
 
+  const getTitle = () => {
+    if (isSubmitted) {
+      return "Submitted Successfully";
+    }
+    if (show === "time") {
+      return "Time Out";
+    }
+    return "Submit Answers";
+  };
+
+  const getHasClose = () => {
+    if (isSubmitted) {
+      return false;
+    }
+    if (show === "time") {
+      return false;
+    }
+
+    return true;
+  };
+
+  const getAttended = () => {
+    let ca = 0;
+
+    questions.forEach((q) => {
+      if (q.selectedAnswer !== null) {
+        ca++;
+      }
+    });
+
+    return ca;
+  };
+
   return (
     <CustomModal
-      title={show !== "time" ? "Submit Answers" : "Time Out"}
+      title={getTitle()}
       show={!!show}
-      hasClose={show !== "time"}
-      setShow={show !== "time" ? setShow : () => {}}
+      hasClose={getHasClose()}
+      setShow={getHasClose() ? setShow : () => {}}
     >
+      <h3>{currentExam.title}</h3>
       <p>Total Questions : {questions.length}</p>
-      <br />
       <p>Correct Answers : {getCorrectAnswers()}</p>
+      <p>Questions Attended : {getAttended()}</p>
+
       <br />
-      <CustomButton onClick={submitExam}>Submit</CustomButton>
+      {!isSubmitted ? (
+        <CustomButton onClick={submitExam}>Submit</CustomButton>
+      ) : (
+        <CustomButton
+          onClick={() => {
+            setCurrentExam(null);
+            setCurrentScreen("list");
+          }}
+        >
+          Back To List
+        </CustomButton>
+      )}
     </CustomModal>
   );
 };

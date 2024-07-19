@@ -77,8 +77,10 @@
       cursor: pointer;
       &:hover {
         background-color: $color_p1;
-        * {
-          color: white;
+        color: white;
+
+        .min {
+          color: white !important;
         }
       }
     }
