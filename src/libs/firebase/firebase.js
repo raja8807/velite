@@ -91,10 +91,10 @@ export const generateUid = function () {
   return Date.now().toString(36) + Math.random().toString(36).substr(2);
 };
 
-export const addData = async (collectionName, data, id) => {
+export const addData = async (collectionName, data) => {
   console.log("ok");
   try {
-    const res = await setDoc(doc(db, collectionName, id), data);
+    const res = await setDoc(doc(db, collectionName, data.id), data);
     return data;
   } catch (err) {
     throw new Error(err);
@@ -112,7 +112,6 @@ export const addMultipleData = async function (collectionName, documents = []) {
     return docsToUpload;
   } catch (err) {
     throw new Error(err);
-
   }
 };
 
@@ -120,7 +119,7 @@ export const updateData = async (collectionName, data, id) => {
   try {
     const updateRef = doc(db, collectionName, id);
     const res = await updateDoc(updateRef, data);
-    return data ;
+    return data;
   } catch (err) {
     throw new Error(err);
   }

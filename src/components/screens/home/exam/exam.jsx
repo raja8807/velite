@@ -25,6 +25,7 @@ const ExamPortal = ({
   setCurrentScreen,
   setCurrentExam,
   setSubmissions,
+  session,
 }) => {
   const [questions, setQuestions] = useState(currentExam.questions);
 
@@ -44,12 +45,6 @@ const ExamPortal = ({
       q[currentQuestionIndex].selectedAnswer = ansIdx;
       return q;
     });
-
-    // if (currentQuestionIndex !== questions.length - 1) {
-    //   timeout = setTimeout(() => {
-    //     setCurrentQuestionIndex((prev) => prev + 1);
-    //   }, 5000);
-    // }
   };
 
   const getAnsColor = (ansIdx) => {
@@ -75,7 +70,7 @@ const ExamPortal = ({
   useEffect(() => {
     const handleBeforeUnload = (event) => {
       event.preventDefault();
-      event.returnValue = ""; // This line is necessary for Chrome to show the alert
+      event.returnValue = "";
     };
 
     window.addEventListener("beforeunload", handleBeforeUnload);
@@ -138,72 +133,79 @@ const ExamPortal = ({
         setCurrentExam={setCurrentExam}
         setSubmissions={setSubmissions}
         currentExam={currentExam}
+        uid={session.uid}
       />
       <CustomContainer>
         <MainFrame>
           <div className={styles.portal}>
-            <div className={styles.top}>
-              <div className={styles.left}>
-                <Clock />
+            <div>
+              <div className={styles.top}>
+                <div className={styles.left}>
+                  <Clock />
+                  <div>
+                    <small>Time Remaining</small>
+                    <p>
+                      {minutes < 10 ? `0${minutes}` : minutes}:
+                      {seconds < 10 ? `0${seconds}` : seconds}
+                    </p>
+                  </div>
+                </div>
+
                 <div>
-                  <small>Time Remaining</small>
-                  <p>
-                    {minutes < 10 ? `0${minutes}` : minutes}:
-                    {seconds < 10 ? `0${seconds}` : seconds}
-                  </p>
+                  <CustomButton
+                    onClick={() => {
+                      setShowSubmitPopup(true);
+                    }}
+                  >
+                    Submit
+                  </CustomButton>
                 </div>
               </div>
 
-              <div>
-                <CustomButton
-                  onClick={() => {
-                    setShowSubmitPopup(true);
-                  }}
-                >
-                  Submit
-                </CustomButton>
-              </div>
-            </div>
+              <div className={styles.middle}>
+                <div className={styles.question}>
+                  <br />
 
-            <div className={styles.middle}>
-              <div className={styles.question}>
-                <small>
-                  Question {currentQuestionIndex + 1} of {questions.length}
-                </small>
-                <p>{currentQuestion.question}</p>
-                <br />
-                <Row>
-                  {currentQuestion.answers.map((ans, ansIdx) => {
-                    return (
-                      <Col xs={12} md={6} key={`ans_${ansIdx}`}>
-                        <div
-                          className={`${styles.answer} ${getAnsColor(ansIdx)}`}
-                          onClick={() => {
-                            if (currentQuestion.selectedAnswer === null) {
-                              checkAnswer(ansIdx);
-                            }
-                          }}
-                        >
-                          <div>{options[ansIdx]}.</div>
-                          {ans}
+                  <small>
+                    Question {currentQuestionIndex + 1} of {questions.length}
+                  </small>
+                  <p>{currentQuestion.question}</p>
+                  <br />
+                  <Row>
+                    {currentQuestion.answers.map((ans, ansIdx) => {
+                      return (
+                        <Col xs={12} md={6} key={`ans_${ansIdx}`}>
+                          <div
+                            className={`${styles.answer} ${getAnsColor(
+                              ansIdx
+                            )}`}
+                            onClick={() => {
+                              if (currentQuestion.selectedAnswer === null) {
+                                checkAnswer(ansIdx);
+                              }
+                            }}
+                          >
+                            <div>{options[ansIdx]}.</div>
+                            {ans}
 
-                          <div className={styles.ico}>
-                            {currentQuestion?.selectedAnswer === ansIdx ? (
-                              currentQuestion.answer ===
-                              currentQuestion.selectedAnswer ? (
-                                <CheckCircleFill />
+                            <div className={styles.ico}>
+                              {currentQuestion?.selectedAnswer === ansIdx ? (
+                                currentQuestion.answer ===
+                                currentQuestion.selectedAnswer ? (
+                                  <CheckCircleFill />
+                                ) : (
+                                  <XCircleFill />
+                                )
                               ) : (
-                                <XCircleFill />
-                              )
-                            ) : (
-                              ""
-                            )}
+                                ""
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      </Col>
-                    );
-                  })}
-                </Row>
+                        </Col>
+                      );
+                    })}
+                  </Row>
+                </div>
               </div>
             </div>
 

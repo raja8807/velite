@@ -1,199 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./list.module.scss";
 import CustomContainer from "@/components/ui/custom_container/custom_container";
 import MainFrame from "@/components/ui/main_frame/main_frame";
 import { Book, Clock, Person, Question } from "react-bootstrap-icons";
 import CustomButton from "@/components/ui/custom_button/custom_button";
 import { signOut } from "firebase/auth";
-import { auth } from "@/libs/firebase/firebase";
+import { auth, getAllData } from "@/libs/firebase/firebase";
 import { Col, Row } from "react-bootstrap";
 const ExamsList = ({
   session,
   setCurrentScreen,
   setCurrentExam,
   submissions,
+  examsList,
 }) => {
-  const examsList = [
-    {
-      id: "1234",
-      time: 1,
-      questions: [
-        {
-          id: "asnd",
-          question:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos rem quis! Delectus, impedit dolores!? Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos",
-          answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"],
-          answer: 2,
-          selectedAnswer: null,
-        },
-        {
-          id: "sdv",
-          question:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos rem quis! Delectus, impedit dolores!? Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos",
-          answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"],
-          answer: 2,
-          selectedAnswer: null,
-        },
-        {
-          id: "aefwe",
-          question:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos rem quis! Delectus, impedit dolores!? Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos",
-          answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"],
-          answer: 2,
-          selectedAnswer: null,
-        },
-        {
-          id: "qewe",
-          question:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos rem quis! Delectus, impedit dolores!? Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos",
-          answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"],
-          answer: 2,
-          selectedAnswer: null,
-        },
-        {
-          id: "dzd",
-          question:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos rem quis! Delectus, impedit dolores!? Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos",
-          answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"],
-          answer: 2,
-          selectedAnswer: null,
-        },
-        {
-          id: "dgdf",
-          question:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos rem quis! Delectus, impedit dolores!? Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos",
-          answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"],
-          answer: 2,
-          selectedAnswer: null,
-        },
-        {
-          id: "asdsd",
-          question:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos rem quis! Delectus, impedit dolores!? Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos",
-          answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"],
-          answer: 2,
-          selectedAnswer: null,
-        },
-        {
-          id: "zzxx",
-          question:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos rem quis! Delectus, impedit dolores!? Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos",
-          answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"],
-          answer: 2,
-          selectedAnswer: null,
-        },
-        {
-          id: "rreree",
-          question:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos rem quis! Delectus, impedit dolores!? Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos",
-          answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"],
-          answer: 2,
-          selectedAnswer: null,
-        },
-        {
-          id: "kdmf",
-          question:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos rem quis! Delectus, impedit dolores!? Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos",
-          answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"],
-          answer: 2,
-          selectedAnswer: null,
-        },
-      ],
-      name: "Exam 1",
-    },
-    {
-      id: "12s4",
-      time: 10,
-      questions: [
-        {
-          id: "asnd",
-          question:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos rem quis! Delectus, impedit dolores!? Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos",
-          answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"],
-          answer: 2,
-          selectedAnswer: null,
-        },
-        {
-          id: "sdv",
-          question:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos rem quis! Delectus, impedit dolores!? Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos",
-          answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"],
-          answer: 2,
-          selectedAnswer: null,
-        },
-        {
-          id: "aefwe",
-          question:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos rem quis! Delectus, impedit dolores!? Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos",
-          answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"],
-          answer: 2,
-          selectedAnswer: null,
-        },
-        {
-          id: "qewe",
-          question:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos rem quis! Delectus, impedit dolores!? Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos",
-          answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"],
-          answer: 2,
-          selectedAnswer: null,
-        },
-        {
-          id: "dzd",
-          question:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos rem quis! Delectus, impedit dolores!? Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos",
-          answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"],
-          answer: 2,
-          selectedAnswer: null,
-        },
-        {
-          id: "dgdf",
-          question:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos rem quis! Delectus, impedit dolores!? Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos",
-          answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"],
-          answer: 2,
-          selectedAnswer: null,
-        },
-        {
-          id: "asdsd",
-          question:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos rem quis! Delectus, impedit dolores!? Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos",
-          answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"],
-          answer: 2,
-          selectedAnswer: null,
-        },
-        {
-          id: "zzxx",
-          question:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos rem quis! Delectus, impedit dolores!? Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos",
-          answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"],
-          answer: 2,
-          selectedAnswer: null,
-        },
-        {
-          id: "rreree",
-          question:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos rem quis! Delectus, impedit dolores!? Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos",
-          answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"],
-          answer: 2,
-          selectedAnswer: null,
-        },
-        {
-          id: "kdmf",
-          question:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos rem quis! Delectus, impedit dolores!? Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio sit blanditiis esse officia eos",
-          answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"],
-          answer: 2,
-          selectedAnswer: null,
-        },
-      ],
-      name: "Exam 2",
-    },
-  ];
-
   const getPrev = (el) => {
-    const sub = submissions.find((s) => s.exam_id === el.id);
-    if (sub) {
-      return `${sub.mark}/${el.questions.length}`;
+    const sub = submissions.filter((s) => s.exam_id === el.id);
+
+    const high = sub.sort((a, b) => {
+      return b.mark - a.mark;
+    })[0];
+
+    if (sub && high) {
+      return `${high.mark}/${el.questions.length}`;
     }
     return "NA";
   };
@@ -237,7 +66,7 @@ const ExamsList = ({
                         <div className={styles.name}>
                           <div>
                             <Book />
-                            <p>{el.name}</p>
+                            <p>{el.title}</p>
                           </div>
                           <div className={styles.ques}>
                             <p>{el.questions.length} Questions</p>
