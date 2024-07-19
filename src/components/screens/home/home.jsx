@@ -45,6 +45,8 @@ const HomeScreen = ({ session }) => {
           setCurrentExam={setCurrentExam}
           setCurrentScreen={setCurrentScreen}
           examsList={examsList}
+          setExamsList={setExamsList}
+          showToastMessage={showToastMessage}
         />
       )}
 

@@ -5,7 +5,7 @@ import MainFrame from "@/components/ui/main_frame/main_frame";
 import { Book, Clock, Person, Question } from "react-bootstrap-icons";
 import CustomButton from "@/components/ui/custom_button/custom_button";
 import { signOut } from "firebase/auth";
-import { auth } from "@/libs/firebase/firebase";
+import { auth, deletData } from "@/libs/firebase/firebase";
 import { Col, Row, Toast, ToastContainer } from "react-bootstrap";
 import { v4 } from "uuid";
 const ExamsList = ({
@@ -13,6 +13,8 @@ const ExamsList = ({
   setCurrentScreen,
   setCurrentExam,
   examsList,
+  setExamsList,
+  showToastMessage,
 }) => {
   return (
     <>
@@ -86,9 +88,28 @@ const ExamsList = ({
                             </div>
                           </div>
                           <div className={styles.time}>
-                            <div>
+                            <div className={styles.min}>
                               <Clock /> <p>{el.time} Minute(s)</p>
                             </div>
+                            <CustomButton
+                              variant={2}
+                              onClick={async (e) => {
+                                e.stopPropagation();
+                                try {
+                                  await deletData("exams", el.id);
+                                  setExamsList((prev) => {
+                                    const ex = [...prev];
+                                    return ex.filter((e) => e.id !== el.id);
+                                  });
+                                  showToastMessage("Deleted");
+                                } catch (err) {
+                                  showToastMessage("Something went wrong");
+                                  console.log(err);
+                                }
+                              }}
+                            >
+                              Delete
+                            </CustomButton>
                           </div>
                         </div>
                       </Col>
