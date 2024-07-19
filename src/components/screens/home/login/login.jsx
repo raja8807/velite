@@ -61,6 +61,7 @@ const LoginScreen = () => {
                   />
                   <CustomInput
                     placeHolder="Password"
+                    type="password"
                     onChange={(e, v) => {
                       setError(null);
 
@@ -127,6 +128,7 @@ const LoginScreen = () => {
                   />
                   <CustomInput
                     placeHolder="Password"
+                    type="password"
                     onChange={(e, v) => {
                       setError(null);
 
@@ -137,6 +139,7 @@ const LoginScreen = () => {
                   />
                   <CustomInput
                     placeHolder="Confirm Password"
+                    type="password"
                     onChange={(e, v) => {
                       setError(null);
 
