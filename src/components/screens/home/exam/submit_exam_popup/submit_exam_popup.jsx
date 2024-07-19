@@ -105,7 +105,7 @@ const SubmitExamPopup = ({
               minValue={0}
               maxValue={questions.length}
               text={`
-                ${(getCorrectAnswers() / questions.length) * 100}%
+                ${((getCorrectAnswers() / questions.length) * 100).toFixed(1)}%
                 `}
             />
           </div>
