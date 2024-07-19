@@ -13,7 +13,23 @@ const ExamsList = ({
   setCurrentExam,
   submissions,
   examsList,
+  setExamsList
 }) => {
+  const fetchExamsList = async () => {
+    try {
+      const res = await getAllData("exams");
+      setExamsList(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (session) {
+      fetchExamsList();
+    }
+  }, [session]);
+
   const getPrev = (el) => {
     const sub = submissions.filter((s) => s.exam_id === el.id);
 

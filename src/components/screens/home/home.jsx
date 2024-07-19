@@ -12,14 +12,12 @@ const HomeScreen = ({ session }) => {
 
   const fetchExamsList = async () => {
     try {
-      const res = await getAllData("exams");
       const subRes = await getDataByQuery("submissions", [
         "uid",
         "==",
         session.uid,
       ]);
       setSubmissions(subRes);
-      setExamsList(res);
     } catch (err) {
       console.log(err);
     }
@@ -46,6 +44,7 @@ const HomeScreen = ({ session }) => {
         setCurrentScreen={setCurrentScreen}
         submissions={submissions}
         examsList={examsList}
+        setExamsList={setExamsList}
       />
     );
   }
