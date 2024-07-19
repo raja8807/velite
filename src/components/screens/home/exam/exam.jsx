@@ -3,7 +3,12 @@ import styles from "./exam.module.scss";
 import MainFrame from "@/components/ui/main_frame/main_frame";
 import CustomContainer from "@/components/ui/custom_container/custom_container";
 import CustomButton from "@/components/ui/custom_button/custom_button";
-import { CheckCircleFill, Clock, XCircleFill } from "react-bootstrap-icons";
+import {
+  CheckCircleFill,
+  Clock,
+  ClockFill,
+  XCircleFill,
+} from "react-bootstrap-icons";
 import { Col, Row } from "react-bootstrap";
 import dynamic from "next/dynamic";
 
@@ -124,6 +129,7 @@ const ExamPortal = ({
         examDurationMinute={examDurationMinute}
         setCurrentScreen={setCurrentScreen}
         setCurrentExam={setCurrentExam}
+        currentExam={currentExam}
       />
       <SubmitExamPopup
         show={showSubmitPopup}
@@ -140,17 +146,6 @@ const ExamPortal = ({
           <div className={styles.portal}>
             <div>
               <div className={styles.top}>
-                <div className={styles.left}>
-                  <Clock />
-                  <div>
-                    <small>Time Remaining</small>
-                    <p>
-                      {minutes < 10 ? `0${minutes}` : minutes}:
-                      {seconds < 10 ? `0${seconds}` : seconds}
-                    </p>
-                  </div>
-                </div>
-
                 <div>
                   <CustomButton
                     onClick={() => {
@@ -160,53 +155,65 @@ const ExamPortal = ({
                     Submit
                   </CustomButton>
                 </div>
-              </div>
-
-              <div className={styles.middle}>
-                <div className={styles.question}>
-                  <br />
-
-                  <small>
-                    Question {currentQuestionIndex + 1} of {questions.length}
-                  </small>
-                  <p>{currentQuestion.question}</p>
-                  <br />
-                  <Row>
-                    {currentQuestion.answers.map((ans, ansIdx) => {
-                      return (
-                        <Col xs={12} md={6} key={`ans_${ansIdx}`}>
-                          <div
-                            className={`${styles.answer} ${getAnsColor(
-                              ansIdx
-                            )}`}
-                            onClick={() => {
-                              if (currentQuestion.selectedAnswer === null) {
-                                checkAnswer(ansIdx);
-                              }
-                            }}
-                          >
-                            <div>{options[ansIdx]}.</div>
-                            {ans}
-
-                            <div className={styles.ico}>
-                              {currentQuestion?.selectedAnswer === ansIdx ? (
-                                currentQuestion.answer ===
-                                currentQuestion.selectedAnswer ? (
-                                  <CheckCircleFill />
-                                ) : (
-                                  <XCircleFill />
-                                )
-                              ) : (
-                                ""
-                              )}
-                            </div>
-                          </div>
-                        </Col>
-                      );
-                    })}
-                  </Row>
+                <h2 className={styles.topTitle}> {currentExam.title}</h2>
+                <div className={styles.left}>
+                  <ClockFill />
+                  <div>
+                    <small>Time Remaining</small>
+                    <p>
+                      {minutes < 10 ? `0${minutes}` : minutes}:
+                      {seconds < 10 ? `0${seconds}` : seconds}
+                    </p>
+                  </div>
                 </div>
               </div>
+              <h2 className={styles.middleTitle}> {currentExam.title}</h2>
+
+              {isActive && (
+                <div className={styles.middle}>
+                  <div className={styles.question}>
+                    <small>
+                      Question {currentQuestionIndex + 1} of {questions.length}
+                    </small>
+                    <p>{currentQuestion.question}</p>
+                    <br />
+                    <Row>
+                      {currentQuestion.answers.map((ans, ansIdx) => {
+                        return (
+                          <Col xs={12} md={6} key={`ans_${ansIdx}`}>
+                            <div
+                              className={`${styles.answer} ${getAnsColor(
+                                ansIdx
+                              )}`}
+                              onClick={() => {
+                                if (currentQuestion.selectedAnswer === null) {
+                                  checkAnswer(ansIdx);
+                                }
+                              }}
+                            >
+                              <div>{options[ansIdx]}.</div>
+                              {ans}
+
+                              <div className={styles.ico}>
+                                {currentQuestion?.selectedAnswer === ansIdx ? (
+                                  currentQuestion.answer ===
+                                  currentQuestion.selectedAnswer ? (
+                                    <CheckCircleFill />
+                                  ) : (
+                                    <XCircleFill />
+                                  )
+                                ) : (
+                                  ""
+                                )}
+                              </div>
+                            </div>
+                          </Col>
+                        );
+                      })}
+                    </Row>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className={styles.bottom}>

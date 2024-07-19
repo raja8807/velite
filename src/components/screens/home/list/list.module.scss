@@ -17,7 +17,7 @@
       .left {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 5px;
 
         small {
           color: $color_g2;
@@ -25,12 +25,13 @@
 
         p {
           margin: 0;
+          font-size: 15px;
           //   color: $color_g3;
         }
 
         svg {
-          font-size: 30px;
-          //   color: $color_p1;
+          font-size: 24px;
+          color: $color_p1;
         }
       }
     }
@@ -48,6 +49,14 @@
         gap: 10px;
         padding-bottom: 8px;
         border-bottom: 1px solid $color_g2;
+
+        .title {
+          font-size: 20px;
+          color: $color_p1;
+        }
+        svg {
+          color: $color_p1;
+        }
 
         > div {
           display: flex;
@@ -70,16 +79,14 @@
           display: flex;
           align-items: center;
           gap: 10px;
-          font-size: 14px;
+          font-size: 15px;
           color: $color_g3;
         }
       }
       cursor: pointer;
       &:hover {
         background-color: $color_p1;
-        color: white;
-
-        .min {
+        *{
           color: white !important;
         }
       }

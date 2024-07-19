@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import styles from "./list.module.scss";
 import CustomContainer from "@/components/ui/custom_container/custom_container";
 import MainFrame from "@/components/ui/main_frame/main_frame";
-import { Book, Clock, Person, Question } from "react-bootstrap-icons";
+import {
+  Book,
+  Clock,
+  Person,
+  PersonCircle,
+  Question,
+} from "react-bootstrap-icons";
 import CustomButton from "@/components/ui/custom_button/custom_button";
 import { signOut } from "firebase/auth";
 import { auth, getAllData } from "@/libs/firebase/firebase";
@@ -50,7 +56,7 @@ const ExamsList = ({
           <div className={styles.portal}>
             <div className={styles.top}>
               <div className={styles.left}>
-                <Person />
+                <PersonCircle />
                 <div>
                   <p>{session?.email}</p>
                 </div>
@@ -82,7 +88,7 @@ const ExamsList = ({
                         <div className={styles.name}>
                           <div>
                             <Book />
-                            <p>{el.title}</p>
+                            <p className={styles.title}>{el.title}</p>
                           </div>
                           <div className={styles.ques}>
                             <p>{el.questions.length} Questions</p>
@@ -93,7 +99,7 @@ const ExamsList = ({
                             <Clock /> <p>{el.time} Minutes</p>
                           </div>
 
-                          <div  className={styles.min}>
+                          <div className={styles.min}>
                             <p>Previous high: {getPrev(el)}</p>
                           </div>
                         </div>

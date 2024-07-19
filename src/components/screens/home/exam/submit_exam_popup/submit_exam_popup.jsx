@@ -4,6 +4,7 @@ import { addData } from "@/libs/firebase/firebase";
 import React from "react";
 import { v4 } from "uuid";
 import { useState } from "react";
+import styles from "./submit_exam_popup.module.scss";
 
 const SubmitExamPopup = ({
   show,
@@ -87,24 +88,26 @@ const SubmitExamPopup = ({
       hasClose={getHasClose()}
       setShow={getHasClose() ? setShow : () => {}}
     >
-      <h3>{currentExam.title}</h3>
-      <p>Total Questions : {questions.length}</p>
-      <p>Correct Answers : {getCorrectAnswers()}</p>
-      <p>Questions Attended : {getAttended()}</p>
+      <div className={styles.SubmitExamPopup}>
+        <h4 className={styles.title}>{currentExam.title}</h4>
+        <p>Total Questions : {questions.length}</p>
+        <p>Correct Answers : {getCorrectAnswers()}</p>
+        <p>Questions Attended : {getAttended()}</p>
 
-      <br />
-      {!isSubmitted ? (
-        <CustomButton onClick={submitExam}>Submit</CustomButton>
-      ) : (
-        <CustomButton
-          onClick={() => {
-            setCurrentExam(null);
-            setCurrentScreen("list");
-          }}
-        >
-          Back To List
-        </CustomButton>
-      )}
+        <br />
+        {!isSubmitted ? (
+          <CustomButton onClick={submitExam}>Submit</CustomButton>
+        ) : (
+          <CustomButton
+            onClick={() => {
+              setCurrentExam(null);
+              setCurrentScreen("list");
+            }}
+          >
+            Back To List
+          </CustomButton>
+        )}
+      </div>
     </CustomModal>
   );
 };

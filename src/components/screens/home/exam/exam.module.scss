@@ -2,8 +2,32 @@
   background-color: #fafafa;
   height: 100%;
 
+  .topTitle {
+    text-align: center;
+    // margin-top: 20px;
+    margin: 0;
+    color: $color_p1;
+  }
+
+  .middleTitle {
+    display: none;
+  }
+
+  @include respond-below(md) {
+    .topTitle {
+      display: none;
+    }
+
+    .middleTitle {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: $color_p1;
+    }
+  }
   .portal {
     background-color: white;
+
     min-height: 100%;
     border-radius: 20px;
     padding: 30px;
@@ -29,13 +53,14 @@
         }
 
         p {
-          margin: 0;
-          //   color: $color_g3;
+          // margin: 0;
+          font-size: 24px;
+          margin-top: -8px;
         }
 
         svg {
           font-size: 30px;
-          //   color: $color_p1;
+          color: $color_p1;
         }
       }
     }
@@ -43,6 +68,11 @@
     .middle {
       display: flex;
       flex-direction: column-reverse;
+      margin-top: 20px;
+
+      @include respond-below(md) {
+        margin-top: 0;
+      }
 
       .question {
         height: 100%;
