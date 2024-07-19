@@ -5,4 +5,15 @@
   p {
     margin-bottom: 8px;
   }
+
+  .result {
+    display: flex;
+    justify-content: space-between;
+
+    .chart {
+      @include flexCenter;
+      width: 100px;
+      margin: auto;
+    }
+  }
 }

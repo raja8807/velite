@@ -6,6 +6,9 @@ import { v4 } from "uuid";
 import { useState } from "react";
 import styles from "./submit_exam_popup.module.scss";
 
+import { CircularProgressbar } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+
 const SubmitExamPopup = ({
   show,
   setShow,
@@ -90,10 +93,23 @@ const SubmitExamPopup = ({
     >
       <div className={styles.SubmitExamPopup}>
         <h4 className={styles.title}>{currentExam.title}</h4>
-        <p>Total Questions : {questions.length}</p>
-        <p>Correct Answers : {getCorrectAnswers()}</p>
-        <p>Questions Attended : {getAttended()}</p>
-
+        <div className={styles.result}>
+          <div>
+            <p>Total Questions : {questions.length}</p>
+            <p>Correct Answers : {getCorrectAnswers()}</p>
+            <p>Questions Attended : {getAttended()}</p>
+          </div>
+          <div className={styles.chart}>
+            <CircularProgressbar
+              value={getCorrectAnswers()}
+              minValue={0}
+              maxValue={questions.length}
+              text={`
+                ${(getCorrectAnswers() / questions.length) * 100}%
+                `}
+            />
+          </div>
+        </div>
         <br />
         {!isSubmitted ? (
           <CustomButton onClick={submitExam}>Submit</CustomButton>
