@@ -14,7 +14,6 @@ const StartExamPopup = ({
   return (
     <CustomModal
       show={show}
-      setShow={setShow}
       title="Start Exam"
       hasClose={false}
     >
