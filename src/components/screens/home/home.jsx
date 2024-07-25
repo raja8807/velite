@@ -4,6 +4,7 @@ import LoginScreen from "./login/login";
 import ExamsList from "./list/list";
 import { getAllData, getDataByQuery } from "@/libs/firebase/firebase";
 import SubmissionsScreen from "./sumbissions/sumbissions";
+import LoadingScreen from "@/components/ui/loading_screen/loading_screen";
 
 const HomeScreen = ({ session }) => {
   const [currentScreen, setCurrentScreen] = useState("");
@@ -74,7 +75,7 @@ const HomeScreen = ({ session }) => {
     );
   }
 
-  return <>loading</>;
+  return <><LoadingScreen/></>;
 };
 
 export default HomeScreen;
