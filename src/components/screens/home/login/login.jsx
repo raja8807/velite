@@ -5,9 +5,11 @@ import CustomInput from "@/components/ui/cuatom_input/cuatom_input";
 import CustomButton from "@/components/ui/custom_button/custom_button";
 import {
   createUserWithEmailAndPassword,
+  getRedirectResult,
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signInWithRedirect,
 } from "firebase/auth";
 import { auth } from "@/libs/firebase/firebase";
 import CustomContainer from "@/components/ui/custom_container/custom_container";
@@ -29,14 +31,42 @@ const LoginScreen = () => {
   });
 
   const loginWithGoogle = async () => {
-   try{
     const provider = new GoogleAuthProvider();
-    const res = await signInWithPopup(auth, provider);
-    console.log(res);
-   }catch(err){
-  
-    console.log(err);
-   }
+
+    await signInWithRedirect(auth, provider)
+      .then((result) => {
+        // This function is triggered after the redirect when the user signs in
+        console.log(result);
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        console.error(
+          "Error signing in with Google: ",
+          errorCode,
+          errorMessage
+        );
+      });
+    // try {
+    //   // alert("ok");
+    //   const provider = new GoogleAuthProvider();
+    //   signInWithRedirect(auth, provider).then((res) => {
+    //     console.log(res);
+    //   });
+
+    //   // alert(res)
+    //   // provider.providerId =
+    //   // alert(getRedirectResult(auth,res))
+    //   // console.log(res);
+    // } catch (err) {
+    //   alert(err.message);
+    //   console.log(err);
+    // }
   };
 
   return (
@@ -186,7 +216,12 @@ const LoginScreen = () => {
                   Or
                   <hr />
                 </div>
-                <div className={styles.btn} onClick={loginWithGoogle}>
+                <div
+                  className={styles.btn}
+                  onClick={async () => {
+                    await loginWithGoogle();
+                  }}
+                >
                   <Google /> Continue with Google
                 </div>
               </div>

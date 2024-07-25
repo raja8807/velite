@@ -12,6 +12,7 @@ const HomeScreen = ({ session }) => {
   const [submissions, setSubmissions] = useState([]);
   const [examsList, setExamsList] = useState([]);
 
+
   const fetchExamsList = async () => {
     try {
       const subRes = await getDataByQuery("submissions", [
