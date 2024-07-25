@@ -33,7 +33,7 @@ const LoginScreen = () => {
   const loginWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
 
-    await signInWithRedirect(auth, provider)
+    await signInWithPopup(auth, provider)
       .then((result) => {
         // This function is triggered after the redirect when the user signs in
         console.log(result);
