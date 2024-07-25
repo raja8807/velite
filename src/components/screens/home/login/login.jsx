@@ -5,11 +5,9 @@ import CustomInput from "@/components/ui/cuatom_input/cuatom_input";
 import CustomButton from "@/components/ui/custom_button/custom_button";
 import {
   createUserWithEmailAndPassword,
-  getRedirectResult,
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   signInWithPopup,
-  signInWithRedirect,
 } from "firebase/auth";
 import { auth } from "@/libs/firebase/firebase";
 import CustomContainer from "@/components/ui/custom_container/custom_container";

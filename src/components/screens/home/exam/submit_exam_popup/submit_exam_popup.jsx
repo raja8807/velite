@@ -8,6 +8,7 @@ import styles from "./submit_exam_popup.module.scss";
 
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import axios from "axios";
 
 const SubmitExamPopup = ({
   show,
@@ -33,10 +34,14 @@ const SubmitExamPopup = ({
   };
 
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const submitExam = async () => {
+    setIsLoading(true);
     try {
       const id = v4();
+
+      const created_at = new Date().toLocaleString();
       const submission = {
         id,
         uid,
@@ -47,15 +52,49 @@ const SubmitExamPopup = ({
         examTime: currentExam.time,
         examTitle: currentExam.title,
         student_email: session?.email,
-        created_at: new Date().toLocaleString(),
+        created_at,
       };
       await addData("submissions", submission);
+
+      const res = await axios.post("/api/mail", {
+        to: session?.email,
+        subject: "Submission Successful",
+        text: "Your submission has been successful",
+        html: `<p>Your submission for ${
+          currentExam.title
+        } on ${created_at} has been successful
+        
+        <br/>
+
+         <strong>Here is your result</strong>
+      <p>Total Questions : ${questions.length}</p>
+      <p>Correct Answers : ${getCorrectAnswers()}</p>
+      <p>
+        Questions Attended : <strong> ${getAttended()}</strong>
+      </p>
+      <p>
+        Percentage : 
+        
+                ${((getCorrectAnswers() / questions.length) * 100).toFixed(1)}%
+                
+      </p>
+      <br />
+      <p>
+        Thank you for the participation
+        <br />
+        <strong>Best Of Luck!</strong>
+      </p>
+        `,
+      });
+
+      console.log(res);
 
       setSubmissions((prev) => [submission, ...prev]);
       setIsSubmitted(true);
     } catch (err) {
       console.log(err);
     }
+    setIsLoading(false);
   };
 
   const getTitle = () => {
@@ -69,7 +108,7 @@ const SubmitExamPopup = ({
   };
 
   const getHasClose = () => {
-    if (isSubmitted) {
+    if (isSubmitted || isLoading) {
       return false;
     }
     if (show === "time") {
@@ -119,7 +158,9 @@ const SubmitExamPopup = ({
         </div>
         <br />
         {!isSubmitted ? (
-          <CustomButton onClick={submitExam}>Submit</CustomButton>
+          <CustomButton onClick={submitExam} isLoading={isLoading}>
+            Submit
+          </CustomButton>
         ) : (
           <CustomButton
             onClick={() => {
