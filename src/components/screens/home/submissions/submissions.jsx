@@ -175,15 +175,17 @@ const SubmissionsScreen = ({
                           <div className={styles.name}>
                             <div>
                               <PersonCircle />
-                              <p
-                                className={styles.title}
-                                dangerouslySetInnerHTML={{
-                                  __html: sub.student_email.replace(
-                                    searchQuery.text,
-                                    `<span>${searchQuery.text}</span>`
-                                  ),
-                                }}
-                              ></p>
+                              {sub && sub.student_email && (
+                                <p
+                                  className={styles.title}
+                                  dangerouslySetInnerHTML={{
+                                    __html: sub.student_email.replace(
+                                      searchQuery.text,
+                                      `<span>${searchQuery.text}</span>`
+                                    ),
+                                  }}
+                                ></p>
+                              )}
                             </div>
                             <div className={styles.ques}>
                               {getDate(sub.created_at)}
