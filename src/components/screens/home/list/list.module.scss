@@ -76,15 +76,17 @@
       }
       cursor: pointer;
       &:hover {
-        background-color: $color_p1;
-        color: white;
+        border-color: $color_p1;
+      }
+    }
+  }
 
-        .min{
-          color: white !important;
-        }
+  @include respond-below(sm) {
+    .portal {
+      padding: 5px;
+      p {
+        font-size: 15px;
       }
     }
   }
 }
-
-

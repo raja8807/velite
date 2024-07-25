@@ -143,6 +143,18 @@ export const deletData = async (collectionName, id) => {
   }
 };
 
+export const deletMultipleData = async (collectionName, data) => {
+  try {
+    data.forEach(async (d) => {
+      const deletRef = doc(db, collectionName, d.id);
+      const res = await deleteDoc(deletRef);
+    });
+    return true;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
 export const getAllData = async (collectionName) => {
   try {
     const res = [];

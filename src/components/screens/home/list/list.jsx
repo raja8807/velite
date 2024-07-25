@@ -15,6 +15,7 @@ const ExamsList = ({
   examsList,
   setExamsList,
   showToastMessage,
+  setShowSubmissionsFor,
 }) => {
   return (
     <>
@@ -91,25 +92,36 @@ const ExamsList = ({
                             <div className={styles.min}>
                               <Clock /> <p>{el.time} Minute(s)</p>
                             </div>
-                            <CustomButton
-                              variant={2}
-                              onClick={async (e) => {
-                                e.stopPropagation();
-                                try {
-                                  await deletData("exams", el.id);
-                                  setExamsList((prev) => {
-                                    const ex = [...prev];
-                                    return ex.filter((e) => e.id !== el.id);
-                                  });
-                                  showToastMessage("Deleted");
-                                } catch (err) {
-                                  showToastMessage("Something went wrong");
-                                  console.log(err);
-                                }
-                              }}
-                            >
-                              Delete
-                            </CustomButton>
+                            <div>
+                              <CustomButton
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setShowSubmissionsFor(el.id);
+                                  setCurrentScreen("submissions");
+                                }}
+                              >
+                                View Submissions
+                              </CustomButton>
+                              <CustomButton
+                                variant={2}
+                                onClick={async (e) => {
+                                  e.stopPropagation();
+                                  try {
+                                    await deletData("exams", el.id);
+                                    setExamsList((prev) => {
+                                      const ex = [...prev];
+                                      return ex.filter((e) => e.id !== el.id);
+                                    });
+                                    showToastMessage("Deleted");
+                                  } catch (err) {
+                                    showToastMessage("Something went wrong");
+                                    console.log(err);
+                                  }
+                                }}
+                              >
+                                Delete
+                              </CustomButton>
+                            </div>
                           </div>
                         </div>
                       </Col>

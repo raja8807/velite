@@ -1,0 +1,118 @@
+.ExamsList {
+  background-color: #fafafa;
+  height: 100%;
+  .portal {
+    background-color: white;
+    min-height: 100%;
+    border-radius: 20px;
+    padding: 30px;
+
+    .noRecs {
+      width: 100%;
+      height: 300px;
+      @include flexCenter;
+    }
+
+    .searchBar {
+      .top {
+        display: grid;
+        grid-template-columns: calc(100% - 50px) 50px;
+        align-items: center;
+
+        svg {
+          font-size: 30px;
+          margin-left: 10px;
+          cursor: pointer;
+          color: $color_p1;
+        }
+      }
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .submission {
+      border: 1px solid $color_g3;
+      margin: 8px 0;
+      border-radius: 8px;
+      padding: 8px 16px;
+
+      .name {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid $color_g2;
+
+        .title {
+          font-size: 18px;
+          color: $color_p1;
+
+          > span {
+            background-color: $color_p1;
+            color: white;
+          }
+        }
+        svg {
+          color: $color_p1;
+        }
+
+        > div {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .ques {
+          font-size: 14px;
+        }
+      }
+
+      .time {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+
+        > div {
+          display: flex;
+          //   align-items: center;
+          flex-direction: column;
+          gap: 10px;
+          font-size: 15px;
+          color: $color_g3;
+
+          p {
+            svg {
+              margin: -4px 5px 0 0;
+            }
+          }
+        }
+
+        .chart {
+          width: 60px;
+          height: 60px;
+          @include flexCenter;
+          //   margin: auto;
+        }
+      }
+      //   cursor: pointer;
+      //   &:hover {
+      //     background-color: $color_p1;
+      //     * {
+      //       color: white !important;
+      //     }
+      //   }
+    }
+  }
+
+  @include respond-below(sm) {
+    .portal {
+      border-radius: 10px;
+      padding: 10px 5px;
+    }
+  }
+}

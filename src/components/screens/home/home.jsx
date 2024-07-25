@@ -4,11 +4,14 @@ import LoginScreen from "./login/login";
 import ExamsList from "./list/list";
 import CustomToast from "@/components/ui/toast/toast";
 import { getAllData } from "@/libs/firebase/firebase";
+import SubmissionsScreen from "./submissions/submissions";
+import LoadingScreen from "@/components/ui/loading_screen/loading_screen";
 
 const HomeScreen = ({ session }) => {
-  const [currentScreen, setCurrentScreen] = useState("login");
+  const [currentScreen, setCurrentScreen] = useState();
   const [currentExam, setCurrentExam] = useState(null);
   const [toastMessage, setToastMessage] = useState("");
+  const [showSubmissionsFor, setShowSubmissionsFor] = useState(null);
 
   const showToastMessage = (message) => {
     setToastMessage(message);
@@ -31,7 +34,9 @@ const HomeScreen = ({ session }) => {
       fetchExams();
       setCurrentScreen("list");
     } else {
-      setCurrentScreen("login");
+      if (session === null) {
+        setCurrentScreen("login");
+      }
     }
   }, [session]);
 
@@ -47,6 +52,7 @@ const HomeScreen = ({ session }) => {
           examsList={examsList}
           setExamsList={setExamsList}
           showToastMessage={showToastMessage}
+          setShowSubmissionsFor={setShowSubmissionsFor}
         />
       )}
 
@@ -70,6 +76,16 @@ const HomeScreen = ({ session }) => {
           isNewExam
         />
       )}
+
+      {currentScreen === "submissions" && (
+        <SubmissionsScreen
+          setCurrentScreen={setCurrentScreen}
+          examId={showSubmissionsFor}
+          setShowSubmissionsFor={setShowSubmissionsFor}
+        />
+      )}
+
+      {!currentScreen && <LoadingScreen/>}
     </>
   );
 };
