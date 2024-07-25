@@ -3,9 +3,10 @@ import ExamPortal from "./exam/exam";
 import LoginScreen from "./login/login";
 import ExamsList from "./list/list";
 import { getAllData, getDataByQuery } from "@/libs/firebase/firebase";
+import SubmissionsScreen from "./sumbissions/sumbissions";
 
 const HomeScreen = ({ session }) => {
-  const [currentScreen, setCurrentScreen] = useState("login");
+  const [currentScreen, setCurrentScreen] = useState("");
   const [currentExam, setCurrentExam] = useState(null);
   const [submissions, setSubmissions] = useState([]);
   const [examsList, setExamsList] = useState([]);
@@ -28,7 +29,9 @@ const HomeScreen = ({ session }) => {
       setCurrentScreen("list");
       fetchExamsList();
     } else {
-      setCurrentScreen("login");
+      if (session === null) {
+        setCurrentScreen("login");
+      }
     }
   }, [session]);
 
@@ -61,7 +64,17 @@ const HomeScreen = ({ session }) => {
     );
   }
 
-  return <></>;
+  if (currentScreen === "submissions") {
+    return (
+      <SubmissionsScreen
+        submissions={submissions}
+        setCurrentScreen={setCurrentScreen}
+        session={session}
+      />
+    );
+  }
+
+  return <>loading</>;
 };
 
 export default HomeScreen;

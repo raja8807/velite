@@ -32,7 +32,7 @@ export default function App({ Component, pageProps }) {
     };
   }, []);
 
-  const [session, setSession] = useState(null);
+  const [session, setSession] = useState(undefined);
 
   useEffect(() => {
     auth.onAuthStateChanged(async (user) => {

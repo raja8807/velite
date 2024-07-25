@@ -40,11 +40,11 @@ const ExamsList = ({
     const sub = submissions.filter((s) => s.exam_id === el.id);
 
     const high = sub.sort((a, b) => {
-      return b.mark - a.mark;
+      return b.correctAnswers - a.correctAnswers;
     })[0];
 
     if (sub && high) {
-      return `${high.mark}/${el.questions.length}`;
+      return `${high.correctAnswers}/${high.totalQuestions}`;
     }
     return "NA";
   };
@@ -72,6 +72,16 @@ const ExamsList = ({
                 </CustomButton>
               </div>
             </div>
+            <br />
+            <CustomButton
+              variant={2}
+              onClick={() => {
+                setCurrentScreen("submissions");
+              }}
+            >
+              Previous Submissions
+            </CustomButton>
+            <br />
             <br />
             <div className={styles.list}>
               <Row>

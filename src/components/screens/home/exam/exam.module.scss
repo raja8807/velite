@@ -175,4 +175,10 @@
       }
     }
   }
+
+  @include respond-below(md) {
+    .portal {
+      padding: 5px;
+    }
+  }
 }

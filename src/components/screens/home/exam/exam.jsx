@@ -180,7 +180,7 @@ const ExamPortal = ({
                     <Row>
                       {currentQuestion.answers.map((ans, ansIdx) => {
                         return (
-                          <Col xs={12} md={6} key={`ans_${ansIdx}`}>
+                          <Col xs={12} md={12} key={`ans_${ansIdx}`}>
                             <div
                               className={`${styles.answer} ${getAnsColor(
                                 ansIdx

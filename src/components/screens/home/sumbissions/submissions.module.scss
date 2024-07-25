@@ -36,7 +36,7 @@
       }
     }
 
-    .exam {
+    .submission {
       border: 1px solid $color_g3;
       margin: 8px 0;
       border-radius: 8px;
@@ -77,30 +77,43 @@
 
         > div {
           display: flex;
-          align-items: center;
+          //   align-items: center;
+          flex-direction: column;
           gap: 10px;
           font-size: 15px;
           color: $color_g3;
+
+          p {
+            svg {
+              margin: -4px 5px 0 0;
+            }
+          }
+        }
+
+        .chart {
+          width: 60px;
+          height: 60px;
+          @include flexCenter;
+          //   margin: auto;
         }
       }
-      cursor: pointer;
-      &:hover {
-        background-color: $color_p1;
-        * {
-          color: white !important;
-        }
-      }
+      //   cursor: pointer;
+      //   &:hover {
+      //     background-color: $color_p1;
+      //     * {
+      //       color: white !important;
+      //     }
+      //   }
     }
   }
 
-  @include respond-below(md) {
+  @include respond-below(sm) {
     .portal {
       padding: 5px;
     }
-
     p,
     svg {
-      font-size: 15px;
+      font-size: 14px;
     }
   }
 }
