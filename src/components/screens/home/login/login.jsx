@@ -29,9 +29,14 @@ const LoginScreen = () => {
   });
 
   const loginWithGoogle = async () => {
+   try{
     const provider = new GoogleAuthProvider();
     const res = await signInWithPopup(auth, provider);
     console.log(res);
+   }catch(err){
+  
+    console.log(err);
+   }
   };
 
   return (
