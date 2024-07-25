@@ -25,7 +25,7 @@
 
         p {
           margin: 0;
-          //   color: $color_g3;
+          // color: $color_g3;
         }
 
         svg {
@@ -53,17 +53,24 @@
           display: flex;
           align-items: center;
           gap: 10px;
+          color: $color_p1;
+          p {
+            font-size: 20px;
+          }
         }
 
         .ques {
-          font-size: 14px;
+          p {
+            font-size: 14px !important;
+            color: black;
+          }
         }
       }
 
       .time {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        // display: flex;
+        // justify-content: space-between;
+        // align-items: center;
         padding: 8px 0;
 
         > div {
@@ -72,6 +79,13 @@
           gap: 10px;
           font-size: 14px;
           color: $color_g3;
+          // margin: 10px 0;
+        }
+
+        .btns {
+          display: flex;
+          justify-content: flex-end;
+          margin-top: 16px;
         }
       }
       cursor: pointer;
@@ -83,9 +97,9 @@
 
   @include respond-below(sm) {
     .portal {
-      padding: 5px;
+      padding: 10px 5px;
       p {
-        font-size: 15px;
+        font-size: 15px ;
       }
     }
   }

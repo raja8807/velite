@@ -65,9 +65,9 @@ const ExamsList = ({
               >
                 Create Exam
               </CustomButton>
-              <br />
 
               <div className={styles.list}>
+                <br />
                 <Row>
                   {examsList.map((el) => {
                     return (
@@ -90,9 +90,9 @@ const ExamsList = ({
                           </div>
                           <div className={styles.time}>
                             <div className={styles.min}>
-                              <Clock /> <p>{el.time} Minute(s)</p>
+                              <Clock /> <p>{el.time} Minutes</p>
                             </div>
-                            <div>
+                            <div className={styles.btns}>
                               <CustomButton
                                 onClick={(e) => {
                                   e.stopPropagation();
