@@ -60,7 +60,7 @@ const ExamsList = ({
               <div className={styles.left}>
                 {session?.photoURL ? (
                   <div className={styles.img}>
-                    <Image src={session?.photoURL} fluid />
+                    <Image src={session?.photoURL} fluid alt="img"/>
                   </div>
                 ) : (
                   <PersonCircle />

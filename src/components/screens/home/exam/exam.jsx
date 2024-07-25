@@ -140,6 +140,7 @@ const ExamPortal = ({
         setSubmissions={setSubmissions}
         currentExam={currentExam}
         uid={session.uid}
+        session={session}
       />
       <CustomContainer>
         <MainFrame>

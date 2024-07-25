@@ -18,6 +18,7 @@ const SubmitExamPopup = ({
   setSubmissions,
   currentExam,
   uid,
+  session,
 }) => {
   const getCorrectAnswers = () => {
     let ca = 0;
@@ -34,20 +35,19 @@ const SubmitExamPopup = ({
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const submitExam = async () => {
-
-    
     try {
       const id = v4();
       const submission = {
         id,
         uid,
         exam_id: currentExam.id,
-        totalQuestions:questions.length,
-        correctAnswers:getCorrectAnswers(),
-        questionsAttended:getAttended(),
-        examTime:currentExam.time,
-        examTitle:currentExam.title,
-        created_at: new Date().toLocaleString()
+        totalQuestions: questions.length,
+        correctAnswers: getCorrectAnswers(),
+        questionsAttended: getAttended(),
+        examTime: currentExam.time,
+        examTitle: currentExam.title,
+        student_email: session?.email,
+        created_at: new Date().toLocaleString(),
       };
       await addData("submissions", submission);
 
