@@ -5,10 +5,13 @@ import CustomInput from "@/components/ui/cuatom_input/cuatom_input";
 import CustomButton from "@/components/ui/custom_button/custom_button";
 import {
   createUserWithEmailAndPassword,
+  GoogleAuthProvider,
   signInWithEmailAndPassword,
+  signInWithPopup,
 } from "firebase/auth";
 import { auth } from "@/libs/firebase/firebase";
 import CustomContainer from "@/components/ui/custom_container/custom_container";
+import { Google } from "react-bootstrap-icons";
 
 const LoginScreen = () => {
   const [currentForm, setCurrentForm] = useState("Login");
@@ -24,6 +27,12 @@ const LoginScreen = () => {
     password: "",
     confirmPassword: "",
   });
+
+  const loginWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    const res = await signInWithPopup(auth, provider);
+    console.log(res);
+  };
 
   return (
     <div className={styles.LoginScreen}>
@@ -166,6 +175,16 @@ const LoginScreen = () => {
                   </small>
                 </form>
               )}
+              <div className={styles.tpp}>
+                <div className={styles.divider}>
+                  <hr />
+                  Or
+                  <hr />
+                </div>
+                <div className={styles.btn} onClick={loginWithGoogle}>
+                  <Google /> Continue with Google
+                </div>
+              </div>
             </div>
           </div>
         </MainFrame>

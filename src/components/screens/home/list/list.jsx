@@ -12,7 +12,7 @@ import {
 import CustomButton from "@/components/ui/custom_button/custom_button";
 import { signOut } from "firebase/auth";
 import { auth, getAllData } from "@/libs/firebase/firebase";
-import { Col, Row } from "react-bootstrap";
+import { Col, Image, Row } from "react-bootstrap";
 const ExamsList = ({
   session,
   setCurrentScreen,
@@ -49,6 +49,8 @@ const ExamsList = ({
     return "NA";
   };
 
+  // console.log();
+
   return (
     <div className={styles.ExamsList}>
       <CustomContainer>
@@ -56,9 +58,15 @@ const ExamsList = ({
           <div className={styles.portal}>
             <div className={styles.top}>
               <div className={styles.left}>
-                <PersonCircle />
+                {session?.photoURL ? (
+                  <div className={styles.img}>
+                    <Image src={session?.photoURL} fluid />
+                  </div>
+                ) : (
+                  <PersonCircle />
+                )}
                 <div>
-                  <p>{session?.email}</p>
+                  <p>{session?.displayName || session?.email}</p>
                 </div>
               </div>
 

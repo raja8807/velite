@@ -24,6 +24,44 @@
           }
         }
       }
+
+      .tpp {
+        .divider {
+          display: flex;
+          align-items: c;
+          font-size: 13px;
+          color: $color_g3;
+          align-items: center;
+          gap: 10px;
+
+          hr {
+            background-color: $color_g2;
+            opacity: 1;
+            height: 1px;
+            border: none;
+            width: 100%;
+            outline: none;
+          }
+        }
+
+        .btn {
+          border: 1px solid black;
+          // text-align: center;
+          padding: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          // color: $color_g3;
+          border-radius: 4px;
+          cursor: pointer;
+
+          &:hover {
+            color: $color_p1;
+            border-color: $color_p1;
+          }
+        }
+      }
     }
   }
 }

@@ -19,9 +19,18 @@
         align-items: center;
         gap: 5px;
 
+        .img {
+          img {
+            height: 30px;
+            width: 30px;
+            border-radius: 50%;
+          }
+        }
+
         small {
           color: $color_g2;
         }
+        // BLP4VM9JQWAUYBARSG8SHMH4
 
         p {
           margin: 0;
