@@ -105,7 +105,7 @@ const SubmissionsScreen = ({
                   onChange={(e, v) => {
                     setSubmissions(() => {
                       return initialSubmissions.filter((s) => {
-                        return s.student_email.includes(v);
+                        return s.student_email && s.student_email.includes(v);
                       });
                     });
                     setSearchQuery((prev) => ({ ...prev, text: v }));
@@ -129,6 +129,7 @@ const SubmissionsScreen = ({
                           setSubmissions(() => {
                             return initialSubmissions.filter((s) => {
                               return (
+                                s.student_email &&
                                 s.student_email.includes(searchQuery.text) &&
                                 (s.correctAnswers / s.totalQuestions) * 100 >= v
                               );
