@@ -13,6 +13,9 @@ import CustomButton from "@/components/ui/custom_button/custom_button";
 import { signOut } from "firebase/auth";
 import { auth, getAllData } from "@/libs/firebase/firebase";
 import { Col, Image, Row } from "react-bootstrap";
+import CustomModal from "@/components/ui/custom_modal/custom_modal";
+import { CircularProgressbar } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 
 
 const ExamsList = ({
@@ -51,8 +54,51 @@ const ExamsList = ({
     return "NA";
   };
 
+  const [showSubmittedPopupFor, setShowSubmittedPopupFor] = useState(null);
+
   return (
     <div className={styles.ExamsList}>
+      <CustomModal
+        show={showSubmittedPopupFor}
+        setShow={setShowSubmittedPopupFor}
+        title={"Already submitted"}
+      >
+        <div className={styles.SubmitExamPopup}>
+          <h4 className={styles.title}>{showSubmittedPopupFor?.examTitle}</h4>
+          <div className={styles.result}>
+            <div>
+              <p>Total Questions : {showSubmittedPopupFor?.totalQuestions}</p>
+              <p>Correct Answers : {showSubmittedPopupFor?.correctAnswers}</p>
+              <p>
+                Questions Attended : {showSubmittedPopupFor?.questionsAttended}
+              </p>
+            </div>
+            <div className={styles.chart}>
+              <CircularProgressbar
+                value={showSubmittedPopupFor?.correctAnswers}
+                minValue={0}
+                maxValue={showSubmittedPopupFor?.totalQuestions}
+                text={`
+                ${(
+                  (showSubmittedPopupFor?.correctAnswers /
+                    showSubmittedPopupFor?.totalQuestions) *
+                  100
+                ).toFixed(1)}%
+                `}
+              />
+            </div>
+          </div>
+          <br />
+
+          <CustomButton
+            onClick={() => {
+              setShowSubmittedPopupFor(null);
+            }}
+          >
+            Back To List
+          </CustomButton>
+        </div>
+      </CustomModal>
       <CustomContainer>
         <MainFrame>
           <div className={styles.portal}>
@@ -99,26 +145,35 @@ const ExamsList = ({
                       <div
                         className={styles.exam}
                         onClick={() => {
-                          setCurrentExam(el);
-                          setCurrentScreen("portal");
+                          if (getPrev(el) === "NA") {
+                            setCurrentExam(el);
+                            setCurrentScreen("portal");
+                          } else {
+                            const x = submissions.filter(
+                              (s) => s.exam_id === el.id
+                            );
+                            setShowSubmittedPopupFor(x[0]);
+                          }
                         }}
                       >
-                        <div className={styles.name}>
-                          <div>
-                            <Book />
-                            <p className={styles.title}>{el.title}</p>
+                        <div className={styles.wrap}>
+                          <div className={styles.name}>
+                            <div>
+                              <Book />
+                              <p className={styles.title}>{el.title}</p>
+                            </div>
+                            <div className={styles.ques}>
+                              <p>{el.questions.length} Questions</p>
+                            </div>
                           </div>
-                          <div className={styles.ques}>
-                            <p>{el.questions.length} Questions</p>
-                          </div>
-                        </div>
-                        <div className={styles.time}>
-                          <div className={styles.min}>
-                            <Clock /> <p>{el.time} Minutes</p>
-                          </div>
+                          <div className={styles.time}>
+                            <div className={styles.min}>
+                              <Clock /> <p>{el.time} Minutes</p>
+                            </div>
 
-                          <div className={styles.min}>
-                            <p>Previous high: {getPrev(el)}</p>
+                            <div className={styles.min}>
+                              <p>Previous high: {getPrev(el)}</p>
+                            </div>
                           </div>
                         </div>
                       </div>

@@ -46,10 +46,18 @@
     }
 
     .exam {
-      border: 1px solid $color_g3;
-      margin: 8px 0;
-      border-radius: 8px;
-      padding: 8px 16px;
+      margin-bottom: 10px;
+      padding: 8px 0px;
+      // background-color: red;
+      height: 100%;
+
+      .wrap {
+        border-radius: 8px;
+        padding: 8px 16px;
+        height: 100%;
+        border: 1px solid $color_g3;
+        margin: 8px 0;
+      }
 
       .name {
         display: flex;
@@ -60,7 +68,7 @@
         border-bottom: 1px solid $color_g2;
 
         .title {
-          font-size: 20px;
+          font-size: 19px;
           color: $color_p1;
         }
         svg {
@@ -75,6 +83,9 @@
 
         .ques {
           font-size: 14px;
+          min-width: 85px;
+          text-align: right;
+          // background-color: red;
         }
       }
 
@@ -94,9 +105,11 @@
       }
       cursor: pointer;
       &:hover {
-        background-color: $color_p1;
-        * {
-          color: white !important;
+        .wrap {
+          background-color: $color_p1;
+          * {
+            color: white !important;
+          }
         }
       }
     }
@@ -110,6 +123,26 @@
     p,
     svg {
       font-size: 15px;
+    }
+  }
+}
+
+.SubmitExamPopup {
+  .title {
+    color: $color_p1;
+  }
+  p {
+    margin-bottom: 8px;
+  }
+
+  .result {
+    display: flex;
+    justify-content: space-between;
+
+    .chart {
+      @include flexCenter;
+      width: 100px;
+      margin: auto;
     }
   }
 }
