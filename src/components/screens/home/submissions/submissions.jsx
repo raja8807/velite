@@ -72,6 +72,15 @@ const SubmissionsScreen = ({
     }
   };
 
+  const getColor = (reason) => {
+    if (reason === "Rules Violation") {
+      return "red";
+    }
+    if (reason === "Time Out") {
+      return "orange";
+    }
+  };
+
   return (
     <div className={styles.ExamsList}>
       {!submissions && <LoadingScreen />}
@@ -143,23 +152,6 @@ const SubmissionsScreen = ({
                         }}
                       />
                     </Col>
-                    {/* <Col xs={6} md={4} lg={3}>
-                    <CustomInput
-                      placeHolder="Percentage less than"
-                      value={searchQuery.lt}
-                      onChange={(e, v) => {
-                        setSubmissions(() => {
-                          return initialSubmissions.filter((s) => {
-                            return (
-                              s.student_email.includes(searchQuery.text) &&
-                              (s.correctAnswers / s.totalQuestions) * 100 <= v
-                            );
-                          });
-                        });
-                        setSearchQuery((prev) => ({ ...prev, lt: v, gt: "" }));
-                      }}
-                    />
-                  </Col> */}
                   </Row>
                   <br />
                 </div>
@@ -212,6 +204,15 @@ const SubmissionsScreen = ({
                               <p>
                                 <CheckCircle />
                                 {sub.correctAnswers} Correct Answers
+                              </p>
+
+                              <p
+                                style={{
+                                  color: getColor(sub.reason),
+                                }}
+                              >
+                                <InfoCircle />
+                                {sub.reason}
                               </p>
                             </div>
 
