@@ -1,6 +1,6 @@
 import CustomButton from "@/components/ui/custom_button/custom_button";
 import CustomModal from "@/components/ui/custom_modal/custom_modal";
-import { addData } from "@/libs/firebase/firebase";
+import { addData, updateData } from "@/libs/firebase/firebase";
 import React from "react";
 import { v4 } from "uuid";
 import { useState } from "react";
@@ -18,12 +18,12 @@ const SubmitExamPopup = ({
   setCurrentScreen,
   setSubmissions,
   currentExam,
-  uid,
   session,
+  currentSubmission,
+  setCurrentSubmission,
 }) => {
   const getCorrectAnswers = () => {
     let ca = 0;
-
     questions.forEach((q) => {
       if (q.answer === q.selectedAnswer) {
         ca++;
@@ -36,67 +36,6 @@ const SubmitExamPopup = ({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const submitExam = async () => {
-    setIsLoading(true);
-    try {
-      const id = v4();
-
-      const created_at = new Date().toLocaleString();
-      const submission = {
-        id,
-        uid,
-        exam_id: currentExam.id,
-        totalQuestions: questions.length,
-        correctAnswers: getCorrectAnswers(),
-        questionsAttended: getAttended(),
-        examTime: currentExam.time,
-        examTitle: currentExam.title,
-        student_email: session?.email,
-        created_at,
-      };
-      await addData("submissions", submission);
-
-      const res = await axios.post("/api/mail", {
-        to: session?.email,
-        subject: "Submission Successful",
-        text: "Your submission has been successful",
-        html: `<p>Your submission for ${
-          currentExam.title
-        } on ${created_at} has been successful
-        
-        <br/>
-
-         <strong>Here is your result</strong>
-      <p>Total Questions : ${questions.length}</p>
-      <p>Correct Answers : ${getCorrectAnswers()}</p>
-      <p>
-        Questions Attended : <strong> ${getAttended()}</strong>
-      </p>
-      <p>
-        Percentage : 
-        
-                ${((getCorrectAnswers() / questions.length) * 100).toFixed(1)}%
-                
-      </p>
-      <br />
-      <p>
-        Thank you for the participation
-        <br />
-        <strong>Best Of Luck!</strong>
-      </p>
-        `,
-      });
-
-      console.log(res);
-
-      setSubmissions((prev) => [submission, ...prev]);
-      setIsSubmitted(true);
-    } catch (err) {
-      console.log(err);
-    }
-    setIsLoading(false);
-  };
-
   const getTitle = () => {
     if (isSubmitted) {
       return "Submitted Successfully";
@@ -104,14 +43,27 @@ const SubmitExamPopup = ({
     if (show === "time") {
       return "Time Out";
     }
+    if (show === "violated") {
+      return "Sorry, You have violated the rules";
+    }
     return "Submit Answers";
+  };
+
+  const getSubmissionReason = () => {
+    if (show === "time") {
+      return "Time Out";
+    }
+    if (show === "violated") {
+      return "Rules Violation";
+    }
+    return "Exam Completed";
   };
 
   const getHasClose = () => {
     if (isSubmitted || isLoading) {
       return false;
     }
-    if (show === "time") {
+    if (show === "time" || show === "violated") {
       return false;
     }
 
@@ -128,6 +80,71 @@ const SubmitExamPopup = ({
     });
 
     return ca;
+  };
+
+  const submitExam = async () => {
+    setIsLoading(true);
+    try {
+      const id = v4();
+
+      const created_at = new Date().toLocaleString();
+
+      const submission = {
+        ...currentSubmission,
+        correctAnswers: getCorrectAnswers(),
+        questionsAttended: getAttended(),
+        reason: getSubmissionReason(),
+      };
+
+      await updateData("submissions", submission, currentSubmission?.id);
+
+      const res = await axios.post("/api/mail", {
+        to: session?.email,
+        subject: "Submission Successful",
+        text: "Your submission has been successful",
+        html: ` <p>
+          Your submission for ${currentExam.title} on ${created_at} has been
+          successful
+        </p>
+
+        <br />
+        <br />
+
+        <strong>Here is your result</strong>
+        <p>Total Questions : ${questions.length}</p>
+        <p>Correct Answers : ${getCorrectAnswers()}</p>
+        <p>
+          Questions Attended : <strong> ${getAttended()}</strong>
+        </p>
+        <p>
+          Percentage: ${(
+            (getCorrectAnswers() / questions.length) *
+            100
+          ).toFixed(1)}%
+        </p>
+        <p> Reason: ${getSubmissionReason()} </p>
+        <br />
+        <br />
+        <p>
+          Thank you for the participation
+          <br />
+          <strong>Best Of Luck!</strong>
+        </p>
+        `,
+      });
+
+      setSubmissions((prev) => {
+        const x = [...prev];
+        const idx = prev.findIndex((s) => s.id === submission?.id);
+        x[idx] = submission;
+        return x;
+      });
+
+      setIsSubmitted(true);
+    } catch (err) {
+      console.log(err);
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -165,6 +182,7 @@ const SubmitExamPopup = ({
           <CustomButton
             onClick={() => {
               setCurrentExam(null);
+              setCurrentSubmission(null);
               setCurrentScreen("list");
             }}
           >

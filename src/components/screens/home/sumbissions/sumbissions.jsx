@@ -26,6 +26,15 @@ const SubmissionsScreen = ({ submissions, setCurrentScreen, session }) => {
     }
   };
 
+  const getColor = (reason) => {
+    if (reason === "Rules Violation") {
+      return "red";
+    }
+    if (reason === "Time Out") {
+      return "orange";
+    }
+  };
+
   return (
     <div className={styles.ExamsList}>
       <CustomContainer>
@@ -97,6 +106,14 @@ const SubmissionsScreen = ({ submissions, setCurrentScreen, session }) => {
                             <p>
                               <CheckCircle />
                               {sub.correctAnswers} Correct Answers
+                            </p>
+                            <p
+                              style={{
+                                color: getColor(sub.reason),
+                              }}
+                            >
+                              <InfoCircle />
+                              {sub.reason}
                             </p>
                           </div>
 

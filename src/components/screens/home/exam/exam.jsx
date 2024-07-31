@@ -36,6 +36,7 @@ const ExamPortal = ({
 
   const [showStartPopup, setShowStartPopup] = useState(true);
   const [showSubmitPopup, setShowSubmitPopup] = useState(false);
+  const [currentSubmission, setCurrentSubmission] = useState(null);
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const currentQuestion = questions[currentQuestionIndex];
@@ -73,17 +74,32 @@ const ExamPortal = ({
   };
 
   useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        if (currentSubmission) {
+          setShowSubmitPopup("violated");
+        }
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("focus", handleVisibilityChange);
+
     const handleBeforeUnload = (event) => {
-      event.preventDefault();
-      event.returnValue = "";
+      if (currentSubmission) {
+        event.preventDefault();
+        event.returnValue = "";
+      }
     };
 
     window.addEventListener("beforeunload", handleBeforeUnload);
 
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("focus", handleVisibilityChange);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, []);
+  }, [currentSubmission]);
 
   const examDurationMinute = currentExam.time;
 
@@ -130,7 +146,11 @@ const ExamPortal = ({
         setCurrentScreen={setCurrentScreen}
         setCurrentExam={setCurrentExam}
         currentExam={currentExam}
+        session={session}
+        setSubmissions={setSubmissions}
+        setCurrentSubmission={setCurrentSubmission}
       />
+
       <SubmitExamPopup
         show={showSubmitPopup}
         setShow={setShowSubmitPopup}
@@ -141,6 +161,8 @@ const ExamPortal = ({
         currentExam={currentExam}
         uid={session.uid}
         session={session}
+        currentSubmission={currentSubmission}
+        setCurrentSubmission={setCurrentSubmission}
       />
       <CustomContainer>
         <MainFrame>

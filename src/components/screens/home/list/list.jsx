@@ -17,7 +17,6 @@ import CustomModal from "@/components/ui/custom_modal/custom_modal";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
-
 const ExamsList = ({
   session,
   setCurrentScreen,
